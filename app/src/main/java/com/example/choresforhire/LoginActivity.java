@@ -47,15 +47,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-//        btnSignup.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.i(TAG, "onClick signup button");
-//                Intent i = new Intent(LoginActivity.this, SignupActivity.class);
-//                startActivity(i);
-//                finish();
-//            }
-//        });
+        btnSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick signup button");
+                Intent i = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 
     private void loginUser(String username, String password) {
