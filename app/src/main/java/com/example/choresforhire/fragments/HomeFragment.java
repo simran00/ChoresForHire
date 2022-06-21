@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.choresforhire.LoginActivity;
-import com.example.choresforhire.MapsMarkerActivity;
+import com.example.choresforhire.MapsActivity;
 import com.example.choresforhire.R;
 import com.parse.ParseUser;
 
@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(), MapsMarkerActivity.class);
+                Intent i = new Intent(getContext(), MapsActivity.class);
                 startActivity(i);
 
             }
