@@ -1,5 +1,6 @@
 package com.example.choresforhire;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -17,11 +18,20 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.List;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = MapsActivity.class.getSimpleName();
@@ -35,7 +45,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
-    private static final int DEFAULT_ZOOM = 15;
+    private static final int DEFAULT_ZOOM = 10;
+    private static final int MAX_DISTANCE = 30;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean locationPermissionGranted;
 
@@ -90,11 +101,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
-        Log.i(TAG, "update location");
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
-        Log.i(TAG, "get device location");
+
+        // showPostsInMap(googleMap);
+
+        showClosestPosts(googleMap);
     }
 
     /**
@@ -135,6 +148,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             // Set the map's camera position to the current location of the device.
                             lastKnownLocation = task.getResult();
                             if (lastKnownLocation != null) {
+                                saveCurrentUserLocation(lastKnownLocation);
                                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(lastKnownLocation.getLatitude(),
                                                 lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
@@ -144,9 +158,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Log.e(TAG, "Exception: %s", task.getException());
                             map.moveCamera(CameraUpdateFactory
                                     .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
-                            map.addMarker(new MarkerOptions()
-                                    .position(defaultLocation)
-                                    .title("Marker in current location."));
                             map.getUiSettings().setMyLocationButtonEnabled(false);
                         }
                     }
@@ -198,6 +209,95 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
+    }
+
+    private void saveCurrentUserLocation(Location lastKnownLocation) {
+        if(lastKnownLocation != null) {
+            ParseGeoPoint currentUserLocation = new ParseGeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+
+            ParseUser currentUser = ParseUser.getCurrentUser();
+
+            if (currentUser != null) {
+                currentUser.put("location", currentUserLocation);
+                currentUser.saveInBackground();
+            } else {
+                goToLoginActivity();
+            }
+        } else {
+            Log.e(TAG, "Error in saving user location");
+        }
+    }
+
+
+    private ParseGeoPoint getCurrentUserLocation(){
+
+        // finding currentUser
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        if (currentUser == null) {
+            goToLoginActivity();
+        }
+        // otherwise, return the current user location
+        return currentUser.getParseGeoPoint("location");
+
+    }
+
+    private void showPostsInMap(final GoogleMap googleMap){
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Post");
+        query.whereExists("location");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override  public void done(List<ParseObject> posts, ParseException e) {
+                if (e == null) {
+                    for(int i = 0; i < posts.size(); i++) {
+                        LatLng postLocation = new LatLng(posts.get(i).getParseGeoPoint("location").getLatitude(), posts.get(i).getParseGeoPoint("location").getLongitude());
+                        googleMap.addMarker(new MarkerOptions().position(postLocation).title(posts.get(i).getString("title")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    }
+                } else {
+                    // handle the error
+                    Log.d("post", "Error: " + e.getMessage());
+                }
+            }
+        });
+        ParseQuery.clearAllCachedResults();
+    }
+
+    private void showClosestPosts(final GoogleMap googleMap){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Post");
+        // query.whereNear("location", getCurrentUserLocation());
+        // setting the limit of near stores to 1, you'll have in the nearStores list only one object: the closest store from the current user
+        query.whereWithinKilometers("location", getCurrentUserLocation(), MAX_DISTANCE);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override  public void done(List<ParseObject> nearPosts, ParseException e) {
+                if (e == null) {
+                    for(int i = 0; i < nearPosts.size(); i++) {
+                        LatLng postLocation = new LatLng(nearPosts.get(i).getParseGeoPoint("location").getLatitude(), nearPosts.get(i).getParseGeoPoint("location").getLongitude());
+                        googleMap.addMarker(new MarkerOptions().position(postLocation).title(nearPosts.get(i).getString("title")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    }
+                    ParseObject closestPost = nearPosts.get(0);
+                    // finding and displaying the distance between the current user and the closest store to him, using method implemented in Step 4
+                    double distance = getCurrentUserLocation().distanceInKilometersTo(closestPost.getParseGeoPoint("location"));
+                    Log.i(TAG, "We found the closest task from you! It's " + closestPost.getString("title") + ". You are " + Math.round (distance * 100.0) / 100.0  + " km from this post.");
+                    // creating a marker in the map showing the closest store to the current user
+                    LatLng closestStoreLocation = new LatLng(closestPost.getParseGeoPoint("location").getLatitude(), closestPost.getParseGeoPoint("location").getLongitude());
+                    // zoom the map to the closestStoreLocation
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                            new LatLng(lastKnownLocation.getLatitude(),
+                                    lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                } else {
+                    Log.d("post", "Error: " + e.getMessage());
+                }
+            }
+        });
+
+        ParseQuery.clearAllCachedResults();
+
+    }
+
+    private void goToLoginActivity() {
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+        finish();
     }
 
 }
