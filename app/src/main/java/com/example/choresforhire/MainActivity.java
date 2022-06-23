@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.choresforhire.fragments.ComposeFragment;
 import com.example.choresforhire.fragments.HomeFragment;
+import com.example.choresforhire.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.ic_home:
                         fragment = new HomeFragment();
+                        break;
+                    case R.id.ic_profile:
+                        fragment = new ProfileFragment();
                         break;
                     default:
                         fragment = new HomeFragment();
