@@ -14,12 +14,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.choresforhire.LoginActivity;
+import com.example.choresforhire.MyChoresActivity;
 import com.example.choresforhire.R;
 import com.parse.ParseUser;
 
 public class ProfileFragment extends Fragment {
     public static final String TAG = "HomeFragment";
     private Button btnLogout;
+    private Button btnMyChores;
+    private Button btnTodo;
     private TextView profileName;
     private TextView profileEmail;
 
@@ -48,6 +51,7 @@ public class ProfileFragment extends Fragment {
         profileEmail.setText(currUser.getEmail());
 
         btnLogout = (Button) view.findViewById(R.id.btnLogout);
+        btnMyChores = (Button) view.findViewById(R.id.btnMyChores);
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +64,14 @@ public class ProfileFragment extends Fragment {
                     startActivity(i);
                 }
 
+            }
+        });
+
+        btnMyChores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), MyChoresActivity.class);
+                startActivity(i);
             }
         });
     }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,8 +19,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.choresforhire.LoginActivity;
 import com.example.choresforhire.MapsActivity;
 import com.example.choresforhire.Post;
+import com.example.choresforhire.PostDetails;
 import com.example.choresforhire.PostsAdapter;
 import com.example.choresforhire.R;
+import com.example.choresforhire.SelectListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -29,7 +32,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SelectListener {
 
     public static final String TAG = "HomeFragment";
     private FloatingActionButton btnMap;
@@ -75,13 +78,13 @@ public class HomeFragment extends Fragment {
 
         // initialize the array that will hold posts and create a PostsAdapter
         allPosts = new ArrayList<>();
-        adapter = new PostsAdapter(getContext(), allPosts);
+        adapter = new PostsAdapter(getContext(), allPosts, this);
 
         // set the layout manager on the recycler view
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         // set the adapter on the recycler view
         rvPosts.setAdapter(adapter);
-        // query posts from Parstagram
+        // query posts
         queryPosts();
 
         btnMap = (FloatingActionButton) view.findViewById(R.id.btnMap);
@@ -102,8 +105,8 @@ public class HomeFragment extends Fragment {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         // include data referred by user key
         query.include(Post.KEY_USER);
-        // limit query to latest 20 items
-        query.setLimit(20);
+        // exclude current user in feed
+        query.whereNotEqualTo("user", ParseUser.getCurrentUser());
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
         // start an asynchronous call for posts
@@ -122,5 +125,14 @@ public class HomeFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void onItemClicked(Post post) {
+        Intent i = new Intent(getContext(), PostDetails.class);
+        i.putExtra("title", (CharSequence) post.get("title"));
+        i.putExtra("pay", String.valueOf(post.get("pay")));
+        i.putExtra("description", post.getDescription());
+        startActivity(i);
     }
 }

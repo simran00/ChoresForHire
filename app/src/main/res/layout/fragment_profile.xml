@@ -49,24 +49,24 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnMyChores"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:text="My Tasks"
+        android:text="My Chores"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileEmail" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btnToDo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Assigned Tasks"
+        android:text="Chores To Do"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/btnMyChores" />
 
     <Button
         android:id="@+id/btnLogout"
@@ -76,5 +76,5 @@
         android:text="Logout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        app:layout_constraintTop_toBottomOf="@+id/btnToDo" />
 </androidx.constraintlayout.widget.ConstraintLayout>

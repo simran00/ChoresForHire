@@ -11,14 +11,15 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
 public class LoginActivity extends AppCompatActivity {
     public static final String TAG = "LoginActivity";
-    private EditText etUsername;
-    private EditText etPassword;
+    private TextInputEditText etUsername;
+    private TextInputEditText etPassword;
     private Button btnLogin;
     private Button btnSignup;
 

@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.parse.ParseGeoPoint;
@@ -19,10 +21,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public static final String TAG = "PostsAdapter";
     private Context context;
     private List<Post> posts;
+    private SelectListener selectListener;
 
-    public PostsAdapter(Context context, List<Post> posts) {
+    public PostsAdapter(Context context, List<Post> posts, SelectListener selectListener) {
         this.context = context;
         this.posts = posts;
+        this.selectListener = selectListener;
     }
 
     // For each row, inflate the layout
@@ -47,6 +51,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     // Define a viewholder
     public class ViewHolder extends RecyclerView.ViewHolder {
+        private ConstraintLayout itemPost;
         private TextView tvTitle;
         private TextView tvPay;
         private TextView tvDescription;
@@ -58,13 +63,13 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvPay = itemView.findViewById(R.id.tvPay);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvDistance = itemView.findViewById(R.id.tvDistance);
+            itemPost = itemView.findViewById(R.id.itemPost);
         }
 
         public void bind(Post post) {
             tvTitle.setText((CharSequence) post.get("title"));
             tvPay.setText("$" + String.valueOf(post.get("pay")));
             tvDescription.setText(post.getDescription());
-            //tvDistance.setText(post.getDescription());
 
             ParseGeoPoint currUser = (ParseGeoPoint) ParseUser.getCurrentUser().get("location");
             ParseGeoPoint postLocation = (ParseGeoPoint) post.getUser().get("location");
@@ -73,11 +78,18 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
             tvDistance.setText(String.valueOf(Math.round (distance * 100.0) / 100.0) + " km");
 
-
-
+            itemPost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (selectListener != null) {
+                        selectListener.onItemClicked(post);
+                    }
+                }
+            });
 
         }
     }
+
 
     // Clean all elements of the recycler
     public void clear() {

@@ -274,13 +274,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         LatLng postLocation = new LatLng(nearPosts.get(i).getParseGeoPoint("location").getLatitude(), nearPosts.get(i).getParseGeoPoint("location").getLongitude());
                         googleMap.addMarker(new MarkerOptions().position(postLocation).title(nearPosts.get(i).getString("title")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                     }
-                    ParseObject closestPost = nearPosts.get(0);
-                    // finding and displaying the distance between the current user and the closest store to him, using method implemented in Step 4
-                    double distance = getCurrentUserLocation().distanceInKilometersTo(closestPost.getParseGeoPoint("location"));
-                    Log.i(TAG, "We found the closest task from you! It's " + closestPost.getString("title") + ". You are " + Math.round (distance * 100.0) / 100.0  + " km from this post.");
-                    // creating a marker in the map showing the closest store to the current user
-                    LatLng closestStoreLocation = new LatLng(closestPost.getParseGeoPoint("location").getLatitude(), closestPost.getParseGeoPoint("location").getLongitude());
-                    // zoom the map to the closestStoreLocation
+                    // zoom the map to the current location
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(lastKnownLocation.getLatitude(),
                                     lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
