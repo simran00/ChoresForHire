@@ -6,8 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.choresforhire.LoginActivity;
 import com.example.choresforhire.MapsActivity;
 import com.example.choresforhire.Post;
 import com.example.choresforhire.PostDetails;
@@ -26,6 +23,7 @@ import com.example.choresforhire.SelectListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -55,6 +53,11 @@ public class HomeFragment extends Fragment implements SelectListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (ParseUser.getCurrentUser().get("location") == null) {
+            Log.e(TAG, "INVALID LOCATION");
+            ParseUser.getCurrentUser().put("location", new ParseGeoPoint(0,0));
+        }
 
         rvPosts = view.findViewById(R.id.rvPosts);
 
@@ -87,7 +90,7 @@ public class HomeFragment extends Fragment implements SelectListener {
         // query posts
         queryPosts();
 
-        btnMap = (FloatingActionButton) view.findViewById(R.id.btnMap);
+        btnMap = (FloatingActionButton) view.findViewById(R.id.btnMapReturn);
 
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,9 +122,15 @@ public class HomeFragment extends Fragment implements SelectListener {
                     return;
                 }
 
+                allPosts.clear();
 
-                // save received posts to list and notify adapter of new data
-                allPosts.addAll(posts);
+                // check if post has already been accepted
+                for (int i = 0; i < posts.size(); i++) {
+                    if (posts.get(i).getAccepted() == null) {
+                        allPosts.add(posts.get(i));
+                    }
+                }
+
                 adapter.notifyDataSetChanged();
             }
         });
@@ -130,6 +139,7 @@ public class HomeFragment extends Fragment implements SelectListener {
     @Override
     public void onItemClicked(Post post) {
         Intent i = new Intent(getContext(), PostDetails.class);
+        i.putExtra("post", post);
         i.putExtra("title", (CharSequence) post.get("title"));
         i.putExtra("pay", String.valueOf(post.get("pay")));
         i.putExtra("description", post.getDescription());

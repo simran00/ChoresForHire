@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.ChoresForHire" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#FF20333D</item>
+        <item name="colorPrimary">#29414e</item>
         <item name="colorPrimaryVariant">#6F8FAF</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->

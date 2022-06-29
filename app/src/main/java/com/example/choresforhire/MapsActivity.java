@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -37,6 +39,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final String TAG = MapsActivity.class.getSimpleName();
     private GoogleMap map;
     private CameraPosition cameraPosition;
+    private FloatingActionButton btnMapReturn;
 
 
     // The entry point to the Fused Location Provider.
@@ -46,7 +49,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // not granted.
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
     private static final int DEFAULT_ZOOM = 10;
-    private static final int MAX_DISTANCE = 30;
+    private static final int MAX_DISTANCE = 100;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean locationPermissionGranted;
 
@@ -79,6 +82,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        btnMapReturn = (FloatingActionButton) findViewById(R.id.btnMapReturn);
+
+        btnMapReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MapsActivity.this, MainActivity.class);
+                startActivity(i);
+
+            }
+        });
     }
 
     @Override
@@ -105,7 +119,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
-        // showPostsInMap(googleMap);
+        //showPostsInMap(googleMap);
 
         showClosestPosts(googleMap);
     }
@@ -212,7 +226,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void saveCurrentUserLocation(Location lastKnownLocation) {
-        if(lastKnownLocation != null) {
+        if(lastKnownLocation != null && !lastKnownLocation.equals(new ParseGeoPoint(0,0))) {
             ParseGeoPoint currentUserLocation = new ParseGeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
 
             ParseUser currentUser = ParseUser.getCurrentUser();
@@ -245,13 +259,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void showPostsInMap(final GoogleMap googleMap){
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Post");
+        query.whereNotEqualTo("user", ParseUser.getCurrentUser());
         query.whereExists("location");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override  public void done(List<ParseObject> posts, ParseException e) {
                 if (e == null) {
+                    Log.i(TAG, "size" + posts.size());
                     for(int i = 0; i < posts.size(); i++) {
                         LatLng postLocation = new LatLng(posts.get(i).getParseGeoPoint("location").getLatitude(), posts.get(i).getParseGeoPoint("location").getLongitude());
-                        googleMap.addMarker(new MarkerOptions().position(postLocation).title(posts.get(i).getString("title")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        map.addMarker(new MarkerOptions().position(postLocation).title(posts.get(i).getString("title")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                     }
                 } else {
                     // handle the error
@@ -264,15 +280,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void showClosestPosts(final GoogleMap googleMap){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Post");
+
         // query.whereNear("location", getCurrentUserLocation());
-        // setting the limit of near stores to 1, you'll have in the nearStores list only one object: the closest store from the current user
+        // setting the limit of near posts to 1, you'll have in the nearStores list only one object: the closest post from the current user
+        query.whereNotEqualTo("user", ParseUser.getCurrentUser());
         query.whereWithinKilometers("location", getCurrentUserLocation(), MAX_DISTANCE);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override  public void done(List<ParseObject> nearPosts, ParseException e) {
                 if (e == null) {
+                    Log.i(TAG, "size" + nearPosts.size());
                     for(int i = 0; i < nearPosts.size(); i++) {
                         LatLng postLocation = new LatLng(nearPosts.get(i).getParseGeoPoint("location").getLatitude(), nearPosts.get(i).getParseGeoPoint("location").getLongitude());
-                        googleMap.addMarker(new MarkerOptions().position(postLocation).title(nearPosts.get(i).getString("title")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        //LatLng postLocation = new LatLng(nearPosts.get(i).getParseUser("user").getParseGeoPoint("location").getLatitude(), nearPosts.get(i).getParseUser("user").getParseGeoPoint("location").getLongitude());
+                        map.addMarker(new MarkerOptions().position(postLocation).title(nearPosts.get(i).getString("title")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                     }
                     // zoom the map to the current location
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(

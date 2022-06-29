@@ -81,6 +81,7 @@ public class ComposeFragment extends Fragment {
         post.setPay(pay);
         post.setDescription(description);
         post.setUser(currentUser);
+        post.setLocation(currentUser.getParseGeoPoint("location"));
         post.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

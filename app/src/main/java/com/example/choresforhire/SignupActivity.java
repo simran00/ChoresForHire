@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -18,9 +19,9 @@ import com.parse.SignUpCallback;
 public class SignupActivity extends AppCompatActivity {
 
     public static final String TAG = "SignupActivity";
-    private EditText etEmail;
-    private EditText etPassword;
-    private EditText etUsername;
+    private TextInputEditText etEmail;
+    private TextInputEditText etPassword;
+    private TextInputEditText etUsername;
     private Button btnSignup;
     private ParseUser currUser;
 
@@ -55,20 +56,9 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.makeText(SignupActivity.this, "Issue with signup!", Toast.LENGTH_SHORT).show();
                             return;
                         } else {
-//                            ParseUser.logInInBackground(username, password, new LogInCallback() {
-//                                @Override
-//                                public void done(ParseUser user, ParseException e) {
-//                                    if (e != null) {
-//                                        Log.e(TAG, "Issue with login", e);
-//                                        Toast.makeText(SignupActivity.this, "Issue with login!", Toast.LENGTH_SHORT).show();
-//                                        return;
-//                                    }
-//                                    Toast.makeText(SignupActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                             Intent i = new Intent(SignupActivity.this, LoginActivity.class);
                             startActivity(i);
                             finish();
-//                                }
-//                            });
                         }
                     }
                 });

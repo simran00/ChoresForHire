@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
@@ -56,6 +58,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvPay;
         private TextView tvDescription;
         private TextView tvDistance;
+        private TextView tvPoster;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,6 +66,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvPay = itemView.findViewById(R.id.tvPay);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvDistance = itemView.findViewById(R.id.tvDistance);
+            tvPoster = itemView.findViewById(R.id.tvPoster);
             itemPost = itemView.findViewById(R.id.itemPost);
         }
 
@@ -71,12 +75,18 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvPay.setText("$" + String.valueOf(post.get("pay")));
             tvDescription.setText(post.getDescription());
 
-            ParseGeoPoint currUser = (ParseGeoPoint) ParseUser.getCurrentUser().get("location");
-            ParseGeoPoint postLocation = (ParseGeoPoint) post.getUser().get("location");
+            ParseGeoPoint currUserLoc = (ParseGeoPoint) ParseUser.getCurrentUser().get("location");
+            ParseGeoPoint postLocation = (ParseGeoPoint) post.get("location");
 
-            double distance = currUser.distanceInKilometersTo(postLocation);
+            if (currUserLoc.equals(new ParseGeoPoint(0,0))) {
+                tvDistance.setText("-- km");
+            } else {
+                double distance = currUserLoc.distanceInKilometersTo(postLocation);
+                tvDistance.setText(String.valueOf(Math.round (distance * 100.0) / 100.0) + " km");
+            }
 
-            tvDistance.setText(String.valueOf(Math.round (distance * 100.0) / 100.0) + " km");
+            tvPoster.setText(post.getUser().getUsername());
+
 
             itemPost.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -100,6 +110,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     // Add a list of items -- change to type used
     public void addAll(List<Post> list) {
         posts.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void add(Post post) {
+        posts.add(post);
         notifyDataSetChanged();
     }
 }

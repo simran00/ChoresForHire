@@ -9,13 +9,35 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/tvLogo"
+        android:layout_width="379dp"
+        android:layout_height="47dp"
+        android:fontFamily="@font/poiret_one"
+        android:text="CHORES FOR HIRE"
+        android:textAlignment="center"
+        android:textColor="#FF20333D"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.appcompat.widget.Toolbar>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnMap"
+        android:id="@+id/btnMapReturn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
-        android:backgroundTint="#F0FFFF"
+        android:backgroundTint="#e6f2ff"
+        app:backgroundTint="#99c2ff"
         android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,9 +46,10 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="36dp"
-        tools:layout_editor_absoluteY="114dp">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:layout_editor_absoluteX="36dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPosts"

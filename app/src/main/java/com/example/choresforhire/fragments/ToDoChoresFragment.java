@@ -1,22 +1,21 @@
-package com.example.choresforhire;
+package com.example.choresforhire.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.choresforhire.fragments.ComposeFragment;
-import com.example.choresforhire.fragments.HomeFragment;
-import com.example.choresforhire.fragments.ProfileFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.example.choresforhire.Post;
+import com.example.choresforhire.PostsAdapter;
+import com.example.choresforhire.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -25,27 +24,39 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyChoresActivity extends AppCompatActivity {
-    public static final String TAG = "MyChoresActivity";
+public class ToDoChoresFragment extends Fragment {
+    public static final String TAG = "ToDoChoresFragment";
     private RecyclerView rvMyPosts;
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.my_chores);
+    public ToDoChoresFragment() {
+        // Required empty public constructor
+    }
 
-        rvMyPosts = findViewById(R.id.rvMyPosts);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_to_do_chores, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        super.onCreate(savedInstanceState);
+
+        rvMyPosts = view.findViewById(R.id.rvMyPosts);
 
         allPosts = new ArrayList<>();
-        adapter = new PostsAdapter(this, allPosts, null);
+        adapter = new PostsAdapter(getContext(), allPosts, null);
 
         // set the layout manager on the recycler view
-        rvMyPosts.setLayoutManager(new LinearLayoutManager(this));
+        rvMyPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         // set the adapter on the recycler view
         rvMyPosts.setAdapter(adapter);
-        // query posts from Parstagram
+        // query posts
         queryPosts();
     }
 
@@ -53,9 +64,10 @@ public class MyChoresActivity extends AppCompatActivity {
         // specify what type of data we want to query - Post.class
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         // include data referred by user key
+        query.include(Post.KEY_ACCEPTED);
         query.include(Post.KEY_USER);
-        // exclude current user in feed
-        query.whereEqualTo("user", ParseUser.getCurrentUser());
+        // get accepted chores
+        query.whereEqualTo("accepted", ParseUser.getCurrentUser());
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
         // start an asynchronous call for posts

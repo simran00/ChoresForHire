@@ -2,6 +2,7 @@ package com.example.choresforhire;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -11,6 +12,8 @@ public class Post extends ParseObject {
     public static final String KEY_PAY = "pay";
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_USER = "user";
+    public static final String KEY_LOCATION = "location";
+    public static final String KEY_ACCEPTED = "accepted";
 
     public String getTitle() {
         return getString(KEY_TITLE);
@@ -43,4 +46,12 @@ public class Post extends ParseObject {
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
     }
+
+    public ParseGeoPoint getLocation() {return getParseGeoPoint(KEY_LOCATION); }
+
+    public void setLocation(ParseGeoPoint location) { put(KEY_LOCATION, location); }
+
+    public ParseUser getAccepted() { return getParseUser(KEY_ACCEPTED); }
+
+    public void setAccepted(ParseUser acceptedUser) { put(KEY_ACCEPTED, acceptedUser); }
 }

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +16,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.choresforhire.LoginActivity;
-import com.example.choresforhire.MyChoresActivity;
 import com.example.choresforhire.R;
 import com.parse.ParseUser;
 
@@ -22,7 +23,7 @@ public class ProfileFragment extends Fragment {
     public static final String TAG = "HomeFragment";
     private Button btnLogout;
     private Button btnMyChores;
-    private Button btnTodo;
+    private Button btnTodoChores;
     private TextView profileName;
     private TextView profileEmail;
 
@@ -47,11 +48,13 @@ public class ProfileFragment extends Fragment {
         profileName = view.findViewById(R.id.profileName);
         profileEmail = view.findViewById(R.id.profileEmail);
 
-        profileName.setText((CharSequence) currUser.get("name"));
-        profileEmail.setText(currUser.getEmail());
+        //profileName.setText((CharSequence) currUser.get("name"));
+        profileName.setText("Name: " + currUser.getUsername());
+        profileEmail.setText("Email: " + currUser.getEmail());
 
         btnLogout = (Button) view.findViewById(R.id.btnLogout);
         btnMyChores = (Button) view.findViewById(R.id.btnMyChores);
+        btnTodoChores = (Button) view.findViewById(R.id.btnToDo);
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,8 +73,24 @@ public class ProfileFragment extends Fragment {
         btnMyChores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(), MyChoresActivity.class);
-                startActivity(i);
+                Fragment fragment = new MyChoresFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.flContainer, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+        btnTodoChores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new ToDoChoresFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.flContainer, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
     }
