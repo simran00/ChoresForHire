@@ -1,19 +1,16 @@
-package com.example.choresforhire;
+package com.example.choresforhire.post;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.parse.Parse;
-import com.parse.ParseException;
+import com.example.choresforhire.R;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
@@ -21,6 +18,7 @@ import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
     public static final String TAG = "PostsAdapter";
+
     private Context context;
     private List<Post> posts;
     private SelectListener selectListener;

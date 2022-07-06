@@ -1,4 +1,4 @@
-package com.example.choresforhire.fragments;
+package com.example.choresforhire.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.choresforhire.MapsActivity;
-import com.example.choresforhire.Post;
-import com.example.choresforhire.PostDetails;
-import com.example.choresforhire.PostsAdapter;
+import com.example.choresforhire.map.MapsActivity;
+import com.example.choresforhire.post.Post;
+import com.example.choresforhire.post.PostDetails;
+import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.R;
-import com.example.choresforhire.SelectListener;
+import com.example.choresforhire.post.SelectListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -31,12 +31,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements SelectListener {
-
     public static final String TAG = "HomeFragment";
-    private FloatingActionButton btnMap;
+
+    private List<Post> allPosts;
+    private PostsAdapter adapter;
     private RecyclerView rvPosts;
-    protected PostsAdapter adapter;
-    protected List<Post> allPosts;
+    private FloatingActionButton btnMap;
     private SwipeRefreshLayout swipeContainer;
 
     public HomeFragment() {

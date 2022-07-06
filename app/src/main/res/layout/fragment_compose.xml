@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="16dp"
 
-    tools:context=".fragments.ComposeFragment">
+    tools:context=".post.ComposeFragment">
 
     <TextView
         android:id="@+id/tvLogo"
@@ -33,7 +33,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/titleInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="280dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:hint="Title"
@@ -52,7 +52,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/payInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="78dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:hint="Pay"
@@ -76,6 +76,8 @@
         android:layout_marginTop="10dp"
         android:hint="Description"
         app:endIconMode="clear_text"
+        app:counterEnabled="true"
+        app:counterMaxLength="250"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleInputLayout">
@@ -85,46 +87,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            app:counterMaxLength="250"
+            android:maxLength="250"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-
-    <!--<EditText
-        android:id="@+id/composeTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="68dp"
-        android:ems="10"
-        android:hint="Title"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--    <EditText-->
-    <!--        android:id="@+id/composePay"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="16dp"-->
-    <!--        android:layout_marginTop="4dp"-->
-    <!--        android:ems="10"-->
-    <!--        android:hint="Pay"-->
-    <!--        android:inputType="number"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/composeTitle" />-->
-
-    <!--    <EditText-->
-    <!--        android:id="@+id/composeDescription"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="16dp"-->
-    <!--        android:layout_marginTop="52dp"-->
-    <!--        android:ems="10"-->
-    <!--        android:gravity="start|top"-->
-    <!--        android:hint="Description"-->
-    <!--        android:inputType="textMultiLine"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/composePay" />-->
 
     <Button
         android:id="@+id/btnSubmit"

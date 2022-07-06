@@ -1,16 +1,17 @@
-package com.example.choresforhire;
+package com.example.choresforhire.login;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.choresforhire.home.MainActivity;
+import com.example.choresforhire.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -18,10 +19,11 @@ import com.parse.ParseUser;
 
 public class LoginActivity extends AppCompatActivity {
     public static final String TAG = "LoginActivity";
-    private TextInputEditText etUsername;
-    private TextInputEditText etPassword;
+
     private Button btnLogin;
     private Button btnSignup;
+    private TextInputEditText etUsername;
+    private TextInputEditText etPassword;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

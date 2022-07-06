@@ -1,4 +1,4 @@
-package com.example.choresforhire.fragments;
+package com.example.choresforhire.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,14 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
-import com.example.choresforhire.Post;
-import com.example.choresforhire.PostDetails;
-import com.example.choresforhire.PostsAdapter;
+import com.example.choresforhire.post.Post;
+import com.example.choresforhire.post.PostDetails;
+import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.R;
-import com.example.choresforhire.SelectListener;
+import com.example.choresforhire.post.SelectListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -31,10 +30,11 @@ import java.util.List;
 
 public class SearchFragment extends Fragment implements SelectListener {
     public static final String TAG = "SearchFragment";
-    private RecyclerView rvSearch;
-    protected PostsAdapter adapter;
-    protected List<Post> allPosts;
+
     private SearchView svSearch;
+    private List<Post> allPosts;
+    private PostsAdapter adapter;
+    private RecyclerView rvSearch;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -69,6 +69,7 @@ public class SearchFragment extends Fragment implements SelectListener {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 ParseQuery<Post> queryList = ParseQuery.getQuery(Post.class);
+                queryList.include(Post.KEY_USER);
                 queryList.whereStartsWith("title", query);
                 queryList.whereNotEqualTo("user", ParseUser.getCurrentUser());
                 queryList.findInBackground(new FindCallback<Post>() {
@@ -79,7 +80,14 @@ public class SearchFragment extends Fragment implements SelectListener {
                             return;
                         }
                         allPosts.clear();
-                        allPosts.addAll(posts);
+
+                        // check if post has already been accepted
+                        for (int i = 0; i < posts.size(); i++) {
+                            if (posts.get(i).getAccepted() == null) {
+                                allPosts.add(posts.get(i));
+                            }
+                        }
+
                         adapter.notifyDataSetChanged();
                     }
                 });

@@ -1,4 +1,4 @@
-package com.example.choresforhire.fragments;
+package com.example.choresforhire.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,12 +15,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.choresforhire.LoginActivity;
+import com.example.choresforhire.login.LoginActivity;
 import com.example.choresforhire.R;
+import com.example.choresforhire.chores.MyChoresFragment;
+import com.example.choresforhire.chores.ToDoChoresFragment;
 import com.parse.ParseUser;
 
 public class ProfileFragment extends Fragment {
     public static final String TAG = "HomeFragment";
+
     private Button btnLogout;
     private Button btnMyChores;
     private Button btnTodoChores;

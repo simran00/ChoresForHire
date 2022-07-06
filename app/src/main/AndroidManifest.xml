@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".ParseApplication"
+        android:name=".home.ParseApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -28,19 +28,20 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".home.MainActivity">
         </activity>
-        <activity android:name=".SignupActivity">
+        <activity android:name=".login.SignupActivity">
         </activity>
-        <activity android:name=".MapsActivity" />
-        <activity android:name=".PostDetails" />
+        <activity android:name=".map.MapsActivity" />
+        <activity android:name=".post.PostDetails" />
+        <activity android:name=".chat.ChatActivity" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

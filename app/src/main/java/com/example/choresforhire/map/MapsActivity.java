@@ -1,5 +1,6 @@
-package com.example.choresforhire;
+package com.example.choresforhire.map;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -13,6 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.choresforhire.login.LoginActivity;
+import com.example.choresforhire.home.MainActivity;
+import com.example.choresforhire.R;
+import com.example.choresforhire.post.Post;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,7 +41,8 @@ import com.parse.ParseUser;
 import java.util.List;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
-    private static final String TAG = MapsActivity.class.getSimpleName();
+    private static final String TAG = "MapsActivity";
+
     private GoogleMap map;
     private CameraPosition cameraPosition;
     private FloatingActionButton btnMapReturn;
@@ -154,7 +160,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
          */
         try {
             if (locationPermissionGranted) {
-                Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
+                @SuppressLint("MissingPermission") Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
                 locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
@@ -206,6 +212,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     /**
      * Updates the map's UI settings based on whether the user has granted location permission.
      */
+    @SuppressLint("MissingPermission")
     private void updateLocationUI() {
         if (map == null) {
             return;
@@ -290,9 +297,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (e == null) {
                     Log.i(TAG, "size" + nearPosts.size());
                     for(int i = 0; i < nearPosts.size(); i++) {
-                        LatLng postLocation = new LatLng(nearPosts.get(i).getParseGeoPoint("location").getLatitude(), nearPosts.get(i).getParseGeoPoint("location").getLongitude());
-                        //LatLng postLocation = new LatLng(nearPosts.get(i).getParseUser("user").getParseGeoPoint("location").getLatitude(), nearPosts.get(i).getParseUser("user").getParseGeoPoint("location").getLongitude());
-                        map.addMarker(new MarkerOptions().position(postLocation).title(nearPosts.get(i).getString("title")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        Post post = (Post) nearPosts.get(i);
+                        if (post.getAccepted() == null) {
+                            LatLng postLocation = new LatLng(nearPosts.get(i).getParseGeoPoint("location").getLatitude(), nearPosts.get(i).getParseGeoPoint("location").getLongitude());
+                            map.addMarker(new MarkerOptions().position(postLocation).title(nearPosts.get(i).getString("title")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        }
                     }
                     // zoom the map to the current location
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(

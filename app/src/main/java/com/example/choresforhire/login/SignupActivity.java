@@ -1,29 +1,29 @@
-package com.example.choresforhire;
+package com.example.choresforhire.login;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.choresforhire.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 public class SignupActivity extends AppCompatActivity {
-
     public static final String TAG = "SignupActivity";
+
+    private Button btnSignup;
+    private ParseUser currUser;
     private TextInputEditText etEmail;
     private TextInputEditText etPassword;
     private TextInputEditText etUsername;
-    private Button btnSignup;
-    private ParseUser currUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

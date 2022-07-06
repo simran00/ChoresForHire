@@ -1,25 +1,21 @@
-package com.example.choresforhire.fragments;
+package com.example.choresforhire.chores;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.choresforhire.Post;
-import com.example.choresforhire.PostsAdapter;
+import com.example.choresforhire.post.Post;
+import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -30,9 +26,10 @@ import java.util.List;
 
 public class MyChoresFragment extends Fragment {
     public static final String TAG = "MyChoresFragment";
+
+    private List<Post> allPosts;
+    private PostsAdapter adapter;
     private RecyclerView rvMyPosts;
-    protected PostsAdapter adapter;
-    protected List<Post> allPosts;
 
     public MyChoresFragment() {
         // Required empty public constructor
@@ -70,7 +67,7 @@ public class MyChoresFragment extends Fragment {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         // include data referred by user key
         query.include(Post.KEY_USER);
-        // exclude current user in feed
+        // include current user in feed
         query.whereEqualTo("user", ParseUser.getCurrentUser());
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");

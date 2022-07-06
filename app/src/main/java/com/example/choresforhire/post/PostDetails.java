@@ -1,10 +1,7 @@
-package com.example.choresforhire;
-
-import static com.example.choresforhire.MainActivity.TAG;
+package com.example.choresforhire.post;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,21 +9,20 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
-import com.example.choresforhire.fragments.HomeFragment;
-import com.parse.Parse;
+import com.example.choresforhire.home.MainActivity;
+import com.example.choresforhire.R;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.w3c.dom.Text;
-
 public class PostDetails extends AppCompatActivity {
+    public static final String TAG = "PostsDetails";
+
+    private Post post;
     private Button btnAccept;
     private Button btnCancel;
-    private Post post;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

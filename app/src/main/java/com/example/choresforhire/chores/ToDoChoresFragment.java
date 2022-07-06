@@ -1,4 +1,4 @@
-package com.example.choresforhire.fragments;
+package com.example.choresforhire.chores;
 
 import android.os.Bundle;
 
@@ -13,8 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.choresforhire.Post;
-import com.example.choresforhire.PostsAdapter;
+import com.example.choresforhire.post.Post;
+import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -26,9 +26,10 @@ import java.util.List;
 
 public class ToDoChoresFragment extends Fragment {
     public static final String TAG = "ToDoChoresFragment";
+
+    private List<Post> allPosts;
+    private PostsAdapter adapter;
     private RecyclerView rvMyPosts;
-    protected PostsAdapter adapter;
-    protected List<Post> allPosts;
 
     public ToDoChoresFragment() {
         // Required empty public constructor

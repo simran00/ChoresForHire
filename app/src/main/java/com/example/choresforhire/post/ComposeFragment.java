@@ -1,5 +1,6 @@
-package com.example.choresforhire.fragments;
+package com.example.choresforhire.post;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,20 +15,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.choresforhire.Post;
+import com.example.choresforhire.home.MainActivity;
 import com.example.choresforhire.R;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 
 public class ComposeFragment extends Fragment {
     public static final String TAG = "ComposeFragment";
-    private EditText composeTitle;
-    private EditText composePay;
-    private EditText composeDescription;
+
     private Button btnSubmit;
+    private EditText composePay;
+    private EditText composeTitle;
+    private EditText composeDescription;
 
     public ComposeFragment() {
         // Required empty public constructor
@@ -53,8 +54,8 @@ public class ComposeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String title = composeTitle.getText().toString();
-                Integer pay = -1;
-                pay = Integer.valueOf(composePay.getText().toString());
+                int pay = -1;
+                pay = Integer.parseInt(composePay.getText().toString());
                 String description = composeDescription.getText().toString();
                 if (title.isEmpty()) {
                     Toast.makeText(getContext(), "Title cannot be empty", Toast.LENGTH_SHORT).show();
@@ -70,6 +71,9 @@ public class ComposeFragment extends Fragment {
                 }
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 savePost(currentUser, title, pay, description);
+
+                Intent i = new Intent(getContext(), MainActivity.class);
+                startActivity(i);
             }
         });
 

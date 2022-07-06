@@ -1,4 +1,4 @@
-package com.example.choresforhire;
+package com.example.choresforhire.post;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
@@ -8,12 +8,12 @@ import com.parse.ParseUser;
 
 @ParseClassName("Post")
 public class Post extends ParseObject {
-    public static final String KEY_TITLE = "title";
     public static final String KEY_PAY = "pay";
-    public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_USER = "user";
+    public static final String KEY_TITLE = "title";
     public static final String KEY_LOCATION = "location";
     public static final String KEY_ACCEPTED = "accepted";
+    public static final String KEY_DESCRIPTION = "description";
 
     public String getTitle() {
         return getString(KEY_TITLE);
