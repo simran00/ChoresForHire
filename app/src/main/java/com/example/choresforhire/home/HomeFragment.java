@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,7 @@ public class HomeFragment extends Fragment implements SelectListener {
     public static final String TAG = "HomeFragment";
 
     private List<Post> allPosts;
+    private SearchView svSearch;
     private PostsAdapter adapter;
     private RecyclerView rvPosts;
     private FloatingActionButton btnMap;
@@ -60,6 +62,7 @@ public class HomeFragment extends Fragment implements SelectListener {
         }
 
         rvPosts = view.findViewById(R.id.rvPosts);
+        svSearch = view.findViewById(R.id.svSearch);
 
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
 
@@ -98,6 +101,41 @@ public class HomeFragment extends Fragment implements SelectListener {
                 Intent i = new Intent(getContext(), MapsActivity.class);
                 startActivity(i);
 
+            }
+        });
+
+        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                ParseQuery<Post> queryList = ParseQuery.getQuery(Post.class);
+                queryList.include(Post.KEY_USER);
+                queryList.whereStartsWith("title", query);
+                queryList.whereNotEqualTo("user", ParseUser.getCurrentUser());
+                queryList.findInBackground(new FindCallback<Post>() {
+                    @Override
+                    public void done(List<Post> posts, ParseException e) {
+                        if (e != null) {
+                            Log.e(TAG, "Issue with getting posts", e);
+                            return;
+                        }
+                        allPosts.clear();
+
+                        // check if post has already been accepted
+                        for (int i = 0; i < posts.size(); i++) {
+                            if (posts.get(i).getAccepted() == null) {
+                                allPosts.add(posts.get(i));
+                            }
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
 

@@ -14,7 +14,6 @@ import com.example.choresforhire.chat.ChatsFragment;
 import com.example.choresforhire.post.ComposeFragment;
 import com.example.choresforhire.home.HomeFragment;
 import com.example.choresforhire.profile.ProfileFragment;
-import com.example.choresforhire.home.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -40,9 +39,6 @@ public class ChoresActivity extends AppCompatActivity {
                         break;
                     case R.id.ic_home:
                         fragment = new HomeFragment();
-                        break;
-                    case R.id.ic_search:
-                        fragment = new SearchFragment();
                         break;
                     case R.id.ic_profile:
                         fragment = new ProfileFragment();

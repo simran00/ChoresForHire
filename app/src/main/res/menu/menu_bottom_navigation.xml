@@ -20,16 +20,17 @@
         android:icon="@drawable/search_icon"
         app:showAsAction="ifRoom" />
 
+    <item android:title="Chat"
+        android:id="@+id/ic_chat"
+        android:enabled="true"
+        android:icon="@drawable/chat_icon"
+        app:showAsAction="ifRoom" />
+
     <item android:title="Profile"
         android:id="@+id/ic_profile"
         android:enabled="true"
         android:icon="@drawable/profile_icon"
         app:showAsAction="ifRoom" />
 
-    <item android:title="Chat"
-        android:id="@+id/ic_chat"
-        android:enabled="true"
-        android:icon="@drawable/chat_icon"
-        app:showAsAction="ifRoom" />
 
 </menu>
