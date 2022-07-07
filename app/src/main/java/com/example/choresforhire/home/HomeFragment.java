@@ -109,7 +109,7 @@ public class HomeFragment extends Fragment implements SelectListener {
             public boolean onQueryTextSubmit(String query) {
                 ParseQuery<Post> queryList = ParseQuery.getQuery(Post.class);
                 queryList.include(Post.KEY_USER);
-                queryList.whereStartsWith("title", query);
+                queryList.whereFullText("title", query);
                 queryList.whereNotEqualTo("user", ParseUser.getCurrentUser());
                 queryList.findInBackground(new FindCallback<Post>() {
                     @Override
@@ -144,12 +144,13 @@ public class HomeFragment extends Fragment implements SelectListener {
     private void queryPosts() {
         // specify what type of data we want to query - Post.class
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
         // include data referred by user key
         query.include(Post.KEY_USER);
         // exclude current user in feed
         query.whereNotEqualTo("user", ParseUser.getCurrentUser());
         // order posts by creation date (newest first)
-        query.addDescendingOrder("createdAt");
+        query.orderByDescending("location");
         // start an asynchronous call for posts
         query.findInBackground(new FindCallback<Post>() {
             @Override

@@ -1,10 +1,13 @@
 package com.example.choresforhire.chores;
 
+import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,8 +31,8 @@ public class MyChoresFragment extends Fragment {
     public static final String TAG = "MyChoresFragment";
 
     private List<Post> allPosts;
-    private PostsAdapter adapter;
-    private RecyclerView rvMyPosts;
+    private MyChoresAdapter adapter;
+    private RecyclerView mMyPosts;
 
     public MyChoresFragment() {
         // Required empty public constructor
@@ -49,17 +52,66 @@ public class MyChoresFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-        rvMyPosts = view.findViewById(R.id.rvMyPosts);
+        mMyPosts = view.findViewById(R.id.rvMyPosts);
 
         allPosts = new ArrayList<>();
-        adapter = new PostsAdapter(getContext(), allPosts, null);
+        adapter = new MyChoresAdapter(getContext(), allPosts);
 
         // set the layout manager on the recycler view
-        rvMyPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        mMyPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         // set the adapter on the recycler view
-        rvMyPosts.setAdapter(adapter);
+        mMyPosts.setAdapter(adapter);
         // query posts
         queryPosts();
+
+        ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            private final ColorDrawable background = new ColorDrawable(0xFFFF6666);
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+                mMyPosts.post(new Runnable() {
+                    public void run() {
+                        adapter.showMenu(viewHolder.getBindingAdapterPosition());
+                    }
+                });
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                View itemView = viewHolder.itemView;
+
+                if (dX > 0) {
+                    background.setBounds(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + ((int) dX), itemView.getBottom());
+                } else if (dX < 0) {
+                    background.setBounds(itemView.getRight() + ((int) dX), itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                } else {
+                    background.setBounds(0, 0, 0, 0);
+                }
+
+                background.draw(c);
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelperCallback);
+        itemTouchHelper.attachToRecyclerView(mMyPosts);
+
+        mMyPosts.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                mMyPosts.post(new Runnable() {
+                    public void run() {
+                        adapter.closeMenu();
+                    }
+                });
+            }
+        });
     }
 
     private void queryPosts() {

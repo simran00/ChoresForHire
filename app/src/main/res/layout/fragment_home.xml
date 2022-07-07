@@ -21,14 +21,15 @@
         android:id="@+id/btnMapReturn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="32dp"
         android:backgroundTint="#e6f2ff"
         android:clickable="true"
         app:backgroundTint="#99c2ff"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/svSearch"
-        app:srcCompat="@drawable/map_icon" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/map_icon"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"

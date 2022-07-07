@@ -14,6 +14,7 @@ public class Post extends ParseObject {
     public static final String KEY_LOCATION = "location";
     public static final String KEY_ACCEPTED = "accepted";
     public static final String KEY_DESCRIPTION = "description";
+    public boolean showMenu = false;
 
     public String getTitle() {
         return getString(KEY_TITLE);
@@ -23,7 +24,7 @@ public class Post extends ParseObject {
         put(KEY_TITLE, title);
     }
 
-    public Integer getPay() {
+    public int getPay() {
         return getInt(KEY_PAY);
     }
 
@@ -54,4 +55,12 @@ public class Post extends ParseObject {
     public ParseUser getAccepted() { return getParseUser(KEY_ACCEPTED); }
 
     public void setAccepted(ParseUser acceptedUser) { put(KEY_ACCEPTED, acceptedUser); }
+
+    public boolean isShowMenu() {
+        return showMenu;
+    }
+
+    public void setShowMenu(boolean showMenu) {
+        this.showMenu = showMenu;
+    }
 }

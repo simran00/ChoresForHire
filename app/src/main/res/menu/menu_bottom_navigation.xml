@@ -14,12 +14,6 @@
         android:icon="@drawable/home_icon"
         app:showAsAction="ifRoom" />
 
-    <item android:title="Search"
-        android:id="@+id/ic_search"
-        android:enabled="true"
-        android:icon="@drawable/search_icon"
-        app:showAsAction="ifRoom" />
-
     <item android:title="Chat"
         android:id="@+id/ic_chat"
         android:enabled="true"

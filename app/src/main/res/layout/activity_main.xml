@@ -8,8 +8,9 @@
 
     <TextView
         android:id="@+id/tvLogo"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="47dp"
+        android:background="#E1EBEE"
         android:fontFamily="@font/poiret_one"
         android:text="CHORES FOR HIRE"
         android:textAlignment="center"
