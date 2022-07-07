@@ -1,6 +1,8 @@
 package com.example.choresforhire.chores;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.choresforhire.R;
 import com.example.choresforhire.post.Post;
 import com.example.choresforhire.chores.BottomSheetDialog;
+import com.example.choresforhire.post.PostDetails;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class MyChoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -77,6 +81,11 @@ public class MyChoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v) {
                     BottomSheetDialog bottomSheet = new BottomSheetDialog();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("post", post);
+                    bottomSheet.setArguments(bundle);
+
                     bottomSheet.show(((AppCompatActivity) context).getSupportFragmentManager(),
                             "ModalBottomSheet");
                 }

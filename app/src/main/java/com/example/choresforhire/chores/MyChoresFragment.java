@@ -139,4 +139,5 @@ public class MyChoresFragment extends Fragment {
             }
         });
     }
+
 }
