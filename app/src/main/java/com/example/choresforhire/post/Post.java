@@ -13,6 +13,7 @@ public class Post extends ParseObject {
     public static final String KEY_TITLE = "title";
     public static final String KEY_LOCATION = "location";
     public static final String KEY_ACCEPTED = "accepted";
+    public static final String KEY_COMPLETED = "completedTask";
     public static final String KEY_DESCRIPTION = "description";
     public boolean showMenu = false;
 
@@ -48,13 +49,29 @@ public class Post extends ParseObject {
         put(KEY_USER, user);
     }
 
-    public ParseGeoPoint getLocation() {return getParseGeoPoint(KEY_LOCATION); }
+    public ParseGeoPoint getLocation() {
+        return getParseGeoPoint(KEY_LOCATION);
+    }
 
-    public void setLocation(ParseGeoPoint location) { put(KEY_LOCATION, location); }
+    public void setLocation(ParseGeoPoint location) {
+        put(KEY_LOCATION, location);
+    }
 
-    public ParseUser getAccepted() { return getParseUser(KEY_ACCEPTED); }
+    public ParseUser getAccepted() {
+        return getParseUser(KEY_ACCEPTED);
+    }
 
-    public void setAccepted(ParseUser acceptedUser) { put(KEY_ACCEPTED, acceptedUser); }
+    public void setAccepted(ParseUser acceptedUser) {
+        put(KEY_ACCEPTED, acceptedUser);
+    }
+
+    public boolean isCompleted() {
+        return getBoolean(KEY_COMPLETED);
+    }
+
+    public void setCompleted(boolean completedTask) {
+        put(KEY_COMPLETED, completedTask);
+    }
 
     public boolean isShowMenu() {
         return showMenu;

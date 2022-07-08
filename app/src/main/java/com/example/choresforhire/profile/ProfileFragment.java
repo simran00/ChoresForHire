@@ -52,8 +52,8 @@ public class ProfileFragment extends Fragment {
         profileEmail = view.findViewById(R.id.profileEmail);
 
         //profileName.setText((CharSequence) currUser.get("name"));
-        profileName.setText("Name: " + currUser.getUsername());
-        profileEmail.setText("Email: " + currUser.getEmail());
+        profileName.setText(currUser.getUsername());
+        profileEmail.setText(currUser.getEmail());
 
         btnLogout = (Button) view.findViewById(R.id.btnLogout);
         btnMyChores = (Button) view.findViewById(R.id.btnMyChores);

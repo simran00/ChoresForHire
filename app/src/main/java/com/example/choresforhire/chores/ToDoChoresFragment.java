@@ -28,7 +28,7 @@ public class ToDoChoresFragment extends Fragment {
     public static final String TAG = "ToDoChoresFragment";
 
     private List<Post> allPosts;
-    private PostsAdapter adapter;
+    private ChoresTodoAdapter adapter;
     private RecyclerView rvMyPosts;
 
     public ToDoChoresFragment() {
@@ -51,7 +51,7 @@ public class ToDoChoresFragment extends Fragment {
         rvMyPosts = view.findViewById(R.id.rvMyPosts);
 
         allPosts = new ArrayList<>();
-        adapter = new PostsAdapter(getContext(), allPosts, null);
+        adapter = new ChoresTodoAdapter(getContext(), allPosts);
 
         // set the layout manager on the recycler view
         rvMyPosts.setLayoutManager(new LinearLayoutManager(getContext()));

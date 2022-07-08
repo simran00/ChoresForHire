@@ -18,15 +18,15 @@
         <entry key="app/src/main/res/layout/activity_maps.xml" value="0.2879379272460938" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.21435394287109377" />
         <entry key="app/src/main/res/layout/bottom_sheet_layout.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/chat_thread.xml" value="0.513037109375" />
-        <entry key="app/src/main/res/layout/chores_todo_item.xml" value="0.2716232299804687" />
+        <entry key="app/src/main/res/layout/chat_thread.xml" value="0.34396514892578123" />
+        <entry key="app/src/main/res/layout/chores_todo_item.xml" value="0.42251739501953134" />
         <entry key="app/src/main/res/layout/custom_info_contents.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_chat_threads.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_chats.xml" value="0.2408906882591093" />
         <entry key="app/src/main/res/layout/fragment_compose.xml" value="0.1341961173124091" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25368041992187496" />
         <entry key="app/src/main/res/layout/fragment_my_chores.xml" value="0.38225097656250007" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.23567783623984903" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.30508243829063025" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.22711029052734377" />
         <entry key="app/src/main/res/layout/fragment_to_do_chores.xml" value="0.13323201621073963" />
         <entry key="app/src/main/res/layout/item_post.xml" value="0.43107290374230217" />

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -51,12 +52,13 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     // Define a viewholder
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ConstraintLayout itemPost;
-        private TextView tvTitle;
+
         private TextView tvPay;
-        private TextView tvDescription;
-        private TextView tvDistance;
+        private TextView tvTitle;
         private TextView tvPoster;
+        private TextView tvDistance;
+        private TextView tvDescription;
+        private ConstraintLayout itemPost;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,12 +71,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }
 
         public void bind(Post post) {
-            tvTitle.setText((CharSequence) post.get("title"));
-            tvPay.setText("$" + String.valueOf(post.get("pay")));
+            tvTitle.setText(post.getTitle());
+            tvPay.setText("$" + post.getPay());
             tvDescription.setText(post.getDescription());
 
             ParseGeoPoint currUserLoc = (ParseGeoPoint) ParseUser.getCurrentUser().get("location");
-            ParseGeoPoint postLocation = (ParseGeoPoint) post.get("location");
+            ParseGeoPoint postLocation = post.getLocation();
 
             if (currUserLoc.equals(new ParseGeoPoint(0,0))) {
                 tvDistance.setText("-- km");
