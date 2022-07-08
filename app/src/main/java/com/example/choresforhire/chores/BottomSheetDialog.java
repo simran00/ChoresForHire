@@ -22,8 +22,10 @@ import com.parse.ParseQuery;
 
 import java.util.List;
 
+//beter to rename it more descriptive
 public class BottomSheetDialog extends BottomSheetDialogFragment {
     private Post post;
+    //Btsheet (Fragment A) -> Delete -> Notify Parent Fragment (Fragment B)
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
@@ -36,28 +38,16 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         Button mDelete = v.findViewById(R.id.btnDelete);
         Button mCancel = v.findViewById(R.id.btnBottomSheetCancel);
 
+        // Notify parent fragment
         mDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (post != null) {
-                    ParseQuery<Post> query = ParseQuery.getQuery("Post");
-                    query.getInBackground(post.getObjectId(), new GetCallback<Post>() {
-                        @Override
-                        public void done(Post object, ParseException e) {
-                            try {
-                                object.delete();
-                                object.saveInBackground();
-                            } catch (ParseException ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    });
+                    Bundle result = new Bundle();
+                    result.putParcelable("post", post);
+                    getParentFragmentManager().setFragmentResult("postDelete", result);
                 }
-
-                Toast.makeText(getActivity(),
-                                "Deleted", Toast.LENGTH_SHORT)
-                        .show();
                 dismiss();
 
             }
@@ -66,9 +56,11 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),
-                                "Cancel", Toast.LENGTH_SHORT)
-                        .show();
+                if (post != null) {
+                    Bundle result = new Bundle();
+                    result.putParcelable("post", post);
+                    getParentFragmentManager().setFragmentResult("closeMenu", result);
+                }
                 dismiss();
             }
         });

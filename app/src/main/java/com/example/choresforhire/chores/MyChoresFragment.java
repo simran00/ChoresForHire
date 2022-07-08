@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,11 +16,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.choresforhire.post.Post;
 import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.R;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -31,7 +34,7 @@ public class MyChoresFragment extends Fragment {
     public static final String TAG = "MyChoresFragment";
 
     private List<Post> allPosts;
-    private MyChoresAdapter adapter;
+    private MyChoresAdapter mChoresadapter;
     private RecyclerView mMyPosts;
 
     public MyChoresFragment() {
@@ -55,12 +58,12 @@ public class MyChoresFragment extends Fragment {
         mMyPosts = view.findViewById(R.id.rvMyPosts);
 
         allPosts = new ArrayList<>();
-        adapter = new MyChoresAdapter(getContext(), allPosts);
+        mChoresadapter = new MyChoresAdapter(getContext(), allPosts);
 
         // set the layout manager on the recycler view
         mMyPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         // set the adapter on the recycler view
-        mMyPosts.setAdapter(adapter);
+        mMyPosts.setAdapter(mChoresadapter);
         // query posts
         queryPosts();
 
@@ -76,7 +79,7 @@ public class MyChoresFragment extends Fragment {
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
                 mMyPosts.post(new Runnable() {
                     public void run() {
-                        adapter.showMenu(viewHolder.getBindingAdapterPosition());
+                        mChoresadapter.showMenu(viewHolder.getBindingAdapterPosition());
                     }
                 });
             }
@@ -107,9 +110,39 @@ public class MyChoresFragment extends Fragment {
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 mMyPosts.post(new Runnable() {
                     public void run() {
-                        adapter.closeMenu();
+                        mChoresadapter.closeMenu();
                     }
                 });
+            }
+        });
+
+        getParentFragmentManager().setFragmentResultListener("postDelete", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                Post deletePost = (Post) bundle.get("post");
+                ParseQuery<Post> query = ParseQuery.getQuery("Post");
+                query.getInBackground(deletePost.getObjectId(), new GetCallback<Post>() {
+                    @Override
+                    public void done(Post object, ParseException e) {
+                        try {
+                            object.delete();
+                            object.saveInBackground();
+                            mChoresadapter.closeMenu();
+                        } catch (ParseException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+                allPosts.remove(deletePost);
+                mChoresadapter.notifyDataSetChanged();
+                Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        getParentFragmentManager().setFragmentResultListener("closeMenu", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                mChoresadapter.closeMenu();
             }
         });
     }
@@ -135,7 +168,7 @@ public class MyChoresFragment extends Fragment {
 
                 // save received posts to list and notify adapter of new data
                 allPosts.addAll(posts);
-                adapter.notifyDataSetChanged();
+                mChoresadapter.notifyDataSetChanged();
             }
         });
     }

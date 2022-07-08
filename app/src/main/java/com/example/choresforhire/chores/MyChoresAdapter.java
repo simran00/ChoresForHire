@@ -55,19 +55,19 @@ public class MyChoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return new MenuViewHolder(view);
         } else {
             view = LayoutInflater.from(context).inflate(R.layout.my_chores_item, parent, false);
-            return new ViewHolder(view);
+            return new MyChoresViewHolder(view);
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Post post = posts.get(holder.getAbsoluteAdapterPosition());
-        if (holder instanceof ViewHolder) {
-            ((ViewHolder) holder).mTitle.setText(post.getTitle());
-            ((ViewHolder) holder).mPay.setText("$" + String.valueOf(post.getPay()));
-            ((ViewHolder) holder).mDescription.setText(post.getDescription());
+        if (holder instanceof MyChoresViewHolder) {
+            ((MyChoresViewHolder)holder).mTitle.setText(post.getTitle());
+            ((MyChoresViewHolder) holder).mPay.setText("$" + String.valueOf(post.getPay()));
+            ((MyChoresViewHolder) holder).mDescription.setText(post.getDescription());
 
-            ((ViewHolder)holder).container.setOnLongClickListener(new View.OnLongClickListener() {
+            ((MyChoresViewHolder)holder).container.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     showMenu(holder.getAbsoluteAdapterPosition());
@@ -130,14 +130,14 @@ public class MyChoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class MyChoresViewHolder extends RecyclerView.ViewHolder {
         private TextView mTitle;
         private TextView mPay;
         private TextView mDescription;
         private ConstraintLayout container;
 
 
-        public ViewHolder(@NonNull View itemView) {
+        public MyChoresViewHolder(@NonNull View itemView) {
             super(itemView);
             mTitle = itemView.findViewById(R.id.myChoreTitle);
             mPay = itemView.findViewById(R.id.myChorePay);
