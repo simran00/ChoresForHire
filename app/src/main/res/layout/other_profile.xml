@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profile.ProfileFragment">
+    tools:context=".profile.OtherProfile">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/profileName"
+        android:id="@+id/profileNameOther"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -52,50 +52,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="01/01/1965"
-        app:layout_constraintStart_toStartOf="@+id/profileName"
-        app:layout_constraintTop_toBottomOf="@+id/profileName" />
+        app:layout_constraintStart_toStartOf="@+id/profileNameOther"
+        app:layout_constraintTop_toBottomOf="@+id/profileNameOther" />
 
     <TextView
-        android:id="@+id/profileEmail"
+        android:id="@+id/profileEmailOther"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="john24@gmail.com"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    <Button
-        android:id="@+id/btnMyChores"
-        android:layout_width="246dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="My Chores"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileEmail" />
-
-    <Button
-        android:id="@+id/btnToDo"
-        android:layout_width="246dp"
-        android:layout_height="wrap_content"
-        android:text="Chores To Do"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnMyChores" />
-
-    <Button
-        android:id="@+id/btnLogout"
-        style="?attr/materialButtonOutlinedStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:text="Logout"
-        android:textColor="#9A2A2A"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnToDo"
-        app:strokeColor="#9A2A2A" />
 
     <TextView
         android:id="@+id/textView3"
@@ -129,5 +96,42 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:background="#E1EBEE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileEmailOther">
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/text_background"
+            android:text="Their Chores"
+            android:textAlignment="center"
+            android:textColor="#29414e"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTheirChores"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView11"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

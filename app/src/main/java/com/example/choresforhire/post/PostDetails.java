@@ -9,9 +9,11 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.example.choresforhire.home.MainActivity;
 import com.example.choresforhire.R;
+import com.example.choresforhire.profile.OtherProfile;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -31,36 +33,29 @@ public class PostDetails extends AppCompatActivity {
         TextView detailTitle;
         TextView detailPay;
         TextView detailDescription;
+        CardView mOtherProfile;
         btnAccept = findViewById(R.id.btnAccept);
         btnCancel = findViewById(R.id.btnCancel);
 
         post = null;
-        String title = "";
-        String pay = "";
-        String description = "";
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 post = (Post) extras.get("post");
-                title = extras.getString("title");
-                pay = extras.getString("pay");
-                description = extras.getString("description");
             }
         } else {
             post = (Post) savedInstanceState.getSerializable("post");
-            title = (String) savedInstanceState.getSerializable("title");
-            pay = (String) savedInstanceState.getSerializable("pay");
-            description = (String) savedInstanceState.getSerializable("description");
         }
 
-        detailTitle = (TextView) findViewById(R.id.detailTitle);
-        detailPay = (TextView) findViewById(R.id.detailPay);
-        detailDescription = (TextView) findViewById(R.id.detailDescription);
+        detailTitle = findViewById(R.id.detailTitle);
+        detailPay = findViewById(R.id.detailPay);
+        detailDescription = findViewById(R.id.detailDescription);
+        mOtherProfile = findViewById(R.id.otherProfile);
 
-        detailTitle.setText(title);
-        detailPay.setText("$" + pay);
-        detailDescription.setText(description);
+        detailTitle.setText(post.getTitle());
+        detailPay.setText("$" + post.getPay());
+        detailDescription.setText(post.getDescription());
 
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +78,15 @@ public class PostDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PostDetails.this, MainActivity.class);
+                startActivity(i);
+            }
+        });
+
+        mOtherProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PostDetails.this, OtherProfile.class);
+                i.putExtra("user", post.getUser());
                 startActivity(i);
             }
         });

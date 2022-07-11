@@ -72,7 +72,7 @@ public class ComposeFragment extends Fragment {
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 savePost(currentUser, title, pay, description);
 
-                Intent i = new Intent(getContext(), MainActivity.class);
+                Intent i = new Intent(getContext(), CheckAnimation.class);
                 startActivity(i);
             }
         });

@@ -5,5 +5,7 @@
         <item>@font/news_cycle</item>
         <item>@font/news_cycle_bold</item>
         <item>@font/poiret_one</item>
+        <item>@font/signika_bold</item>
+        <item>@font/signika_light</item>
     </array>
 </resources>

@@ -20,13 +20,15 @@
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.21435394287109377" />
         <entry key="app/src/main/res/layout/bottom_sheet_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/chat_thread.xml" value="0.34396514892578123" />
+        <entry key="app/src/main/res/layout/check_animation.xml" value="0.1511091149371603" />
         <entry key="app/src/main/res/layout/chores_todo_item.xml" value="0.42251739501953134" />
         <entry key="app/src/main/res/layout/custom_info_contents.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_chat_threads.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_chats.xml" value="0.2408906882591093" />
+        <entry key="app/src/main/res/layout/fragment_chats.xml" value="0.3335924094505156" />
         <entry key="app/src/main/res/layout/fragment_compose.xml" value="0.2232891348905341" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_my_chores.xml" value="0.35436893203883496" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.32222900390625003" />
+        <entry key="app/src/main/res/layout/fragment_my_chores.xml" value="0.23714481094508494" />
+        <entry key="app/src/main/res/layout/fragment_other_profile.xml" value="0.21351577095363458" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.30508243829063025" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.22711029052734377" />
         <entry key="app/src/main/res/layout/fragment_to_do_chores.xml" value="0.29490356445312504" />
@@ -36,7 +38,8 @@
         <entry key="app/src/main/res/layout/my_chores.xml" value="0.132025146484375" />
         <entry key="app/src/main/res/layout/my_chores_item.xml" value="0.3433088864961294" />
         <entry key="app/src/main/res/layout/my_chores_swipe_menu.xml" value="0.3466842651367188" />
-        <entry key="app/src/main/res/layout/post_details.xml" value="0.22979583740234383" />
+        <entry key="app/src/main/res/layout/other_profile.xml" value="0.204669189453125" />
+        <entry key="app/src/main/res/layout/post_details.xml" value="0.16920318603515633" />
         <entry key="app/src/main/res/layout/profile_update.xml" value="0.1550409952799479" />
         <entry key="app/src/main/res/menu/current_place_menu.xml" value="0.18153846153846154" />
         <entry key="app/src/main/res/menu/menu_bottom_navigation.xml" value="0.22718748869719332" />

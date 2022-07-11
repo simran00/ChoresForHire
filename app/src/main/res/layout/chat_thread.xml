@@ -5,10 +5,11 @@
     android:id="@+id/thread_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
     android:background="@drawable/border">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/otherProfile"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
@@ -39,7 +40,7 @@
         android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintStart_toEndOf="@+id/otherProfile"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

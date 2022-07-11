@@ -51,13 +51,12 @@ public class ProfileFragment extends Fragment {
         profileName = view.findViewById(R.id.profileName);
         profileEmail = view.findViewById(R.id.profileEmail);
 
-        //profileName.setText((CharSequence) currUser.get("name"));
         profileName.setText(currUser.getUsername());
         profileEmail.setText(currUser.getEmail());
 
-        btnLogout = (Button) view.findViewById(R.id.btnLogout);
-        btnMyChores = (Button) view.findViewById(R.id.btnMyChores);
-        btnTodoChores = (Button) view.findViewById(R.id.btnToDo);
+        btnLogout = view.findViewById(R.id.btnLogout);
+        btnMyChores = view.findViewById(R.id.btnMyChores);
+        btnTodoChores = view.findViewById(R.id.btnToDo);
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override

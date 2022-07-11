@@ -213,9 +213,6 @@ public class HomeFragment extends Fragment implements SelectListener {
     public void onItemClicked(Post post) {
         Intent i = new Intent(getContext(), PostDetails.class);
         i.putExtra("post", post);
-        i.putExtra("title", (CharSequence) post.get("title"));
-        i.putExtra("pay", String.valueOf(post.get("pay")));
-        i.putExtra("description", post.getDescription());
         startActivity(i);
     }
 }

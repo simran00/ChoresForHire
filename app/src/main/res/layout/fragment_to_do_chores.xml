@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRecommended"
@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/rvTodoPosts" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/textView10"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

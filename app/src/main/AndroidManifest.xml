@@ -42,6 +42,8 @@
         <activity android:name=".map.MapsActivity" />
         <activity android:name=".post.PostDetails" />
         <activity android:name=".chat.ChatActivity" />
+        <activity android:name=".post.CheckAnimation" />
+        <activity android:name=".profile.OtherProfile" />
 
         <meta-data
             android:name="preloaded_fonts"
