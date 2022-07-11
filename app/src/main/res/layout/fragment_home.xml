@@ -7,6 +7,39 @@
     android:orientation="vertical"
     tools:context=".home.MainActivity">
 
+    <RadioGroup
+        android:id="@+id/sortRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="30dp"
+        android:checkedButton="@+id/recentRadio"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@+id/textView9"
+        app:layout_constraintTop_toBottomOf="@+id/svSearch">
+
+        <RadioButton
+            android:id="@+id/recentRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recent" />
+
+        <RadioButton
+            android:id="@+id/distRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Distance" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text="Sort By"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sortRadioGroup" />
+
     <SearchView
         android:id="@+id/svSearch"
         android:layout_width="match_parent"
@@ -38,7 +71,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/svSearch">
+        app:layout_constraintTop_toBottomOf="@+id/sortRadioGroup">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPosts"

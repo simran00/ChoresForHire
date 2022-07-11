@@ -79,10 +79,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ParseGeoPoint postLocation = post.getLocation();
 
             if (currUserLoc.equals(new ParseGeoPoint(0,0))) {
-                tvDistance.setText("-- km");
+                tvDistance.setText("-- mi");
             } else {
-                double distance = currUserLoc.distanceInKilometersTo(postLocation);
-                tvDistance.setText(String.valueOf(Math.round (distance * 100.0) / 100.0) + " km");
+                double distance = currUserLoc.distanceInMilesTo(postLocation);
+                tvDistance.setText(String.valueOf(Math.round (distance * 100.0) / 100.0) + " mi");
             }
 
             tvPoster.setText(post.getUser().getUsername());

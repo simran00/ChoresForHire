@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -38,8 +40,13 @@ public class HomeFragment extends Fragment implements SelectListener {
     private SearchView svSearch;
     private PostsAdapter adapter;
     private RecyclerView rvPosts;
+    private RadioGroup mSorting;
+    private RadioButton mRecent;
+    private RadioButton mDist;
     private FloatingActionButton btnMap;
     private SwipeRefreshLayout swipeContainer;
+
+    private boolean statusRadioBtn;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -61,8 +68,28 @@ public class HomeFragment extends Fragment implements SelectListener {
             ParseUser.getCurrentUser().put("location", new ParseGeoPoint(0,0));
         }
 
+        statusRadioBtn = true;
+
         rvPosts = view.findViewById(R.id.rvPosts);
         svSearch = view.findViewById(R.id.svSearch);
+        mSorting = view.findViewById(R.id.sortRadioGroup);
+
+        mSorting.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.recentRadio:
+                        statusRadioBtn = true;
+                        queryPostsByTime(statusRadioBtn);
+                        break;
+                    case R.id.distRadio:
+                        statusRadioBtn = false;
+                        queryPostsByTime(statusRadioBtn);
+                        break;
+                }
+            }
+        });
+
 
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
 
@@ -72,7 +99,7 @@ public class HomeFragment extends Fragment implements SelectListener {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
-                queryPosts();
+                queryPostsByTime(statusRadioBtn);
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -91,7 +118,7 @@ public class HomeFragment extends Fragment implements SelectListener {
         // set the adapter on the recycler view
         rvPosts.setAdapter(adapter);
         // query posts
-        queryPosts();
+        queryPostsByTime(statusRadioBtn);
 
         btnMap = (FloatingActionButton) view.findViewById(R.id.btnMapReturn);
 
@@ -111,6 +138,7 @@ public class HomeFragment extends Fragment implements SelectListener {
                 queryList.include(Post.KEY_USER);
                 queryList.whereFullText("title", query);
                 queryList.whereNotEqualTo("user", ParseUser.getCurrentUser());
+
                 queryList.findInBackground(new FindCallback<Post>() {
                     @Override
                     public void done(List<Post> posts, ParseException e) {
@@ -141,7 +169,7 @@ public class HomeFragment extends Fragment implements SelectListener {
 
     }
 
-    private void queryPosts() {
+    private void queryPostsByTime(boolean statusRadioBtn) {
         // specify what type of data we want to query - Post.class
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
@@ -149,8 +177,14 @@ public class HomeFragment extends Fragment implements SelectListener {
         query.include(Post.KEY_USER);
         // exclude current user in feed
         query.whereNotEqualTo("user", ParseUser.getCurrentUser());
-        // order posts by creation date (newest first)
-        query.orderByDescending("location");
+
+        if (statusRadioBtn) {
+            // order posts by time created
+            query.addDescendingOrder("createdAt");
+        } else {
+            // order posts by distance
+            query.whereWithinMiles("location", ParseUser.getCurrentUser().getParseGeoPoint("location"), 100);
+        }
         // start an asynchronous call for posts
         query.findInBackground(new FindCallback<Post>() {
             @Override

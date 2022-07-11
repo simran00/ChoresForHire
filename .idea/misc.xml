@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.2205" />
         <entry key="app/src/main/res/drawable/message_incoming.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/message_outgoing.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/text_background.xml" value="0.228" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.17411798547815405" />
         <entry key="app/src/main/res/layout/activity_chores.xml" value="0.10416666666666667" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.444891357421875" />
@@ -23,13 +24,13 @@
         <entry key="app/src/main/res/layout/custom_info_contents.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_chat_threads.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_chats.xml" value="0.2408906882591093" />
-        <entry key="app/src/main/res/layout/fragment_compose.xml" value="0.1341961173124091" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25368041992187496" />
-        <entry key="app/src/main/res/layout/fragment_my_chores.xml" value="0.38225097656250007" />
+        <entry key="app/src/main/res/layout/fragment_compose.xml" value="0.2232891348905341" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_my_chores.xml" value="0.35436893203883496" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.30508243829063025" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.22711029052734377" />
-        <entry key="app/src/main/res/layout/fragment_to_do_chores.xml" value="0.13323201621073963" />
-        <entry key="app/src/main/res/layout/item_post.xml" value="0.43107290374230217" />
+        <entry key="app/src/main/res/layout/fragment_to_do_chores.xml" value="0.29490356445312504" />
+        <entry key="app/src/main/res/layout/item_post.xml" value="0.2842406283516772" />
         <entry key="app/src/main/res/layout/message_incoming.xml" value="0.3318914883378623" />
         <entry key="app/src/main/res/layout/message_outgoing.xml" value="0.3424826138261436" />
         <entry key="app/src/main/res/layout/my_chores.xml" value="0.132025146484375" />

@@ -29,7 +29,7 @@ public class ToDoChoresFragment extends Fragment {
 
     private List<Post> allPosts;
     private ChoresTodoAdapter adapter;
-    private RecyclerView rvMyPosts;
+    private RecyclerView mTodoPosts;
 
     public ToDoChoresFragment() {
         // Required empty public constructor
@@ -48,15 +48,15 @@ public class ToDoChoresFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-        rvMyPosts = view.findViewById(R.id.rvMyPosts);
+        mTodoPosts = view.findViewById(R.id.rvTodoPosts);
 
         allPosts = new ArrayList<>();
         adapter = new ChoresTodoAdapter(getContext(), allPosts);
 
         // set the layout manager on the recycler view
-        rvMyPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        mTodoPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         // set the adapter on the recycler view
-        rvMyPosts.setAdapter(adapter);
+        mTodoPosts.setAdapter(adapter);
         // query posts
         queryPosts();
     }

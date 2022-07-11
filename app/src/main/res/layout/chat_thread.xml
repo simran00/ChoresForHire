@@ -35,6 +35,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:text="Jane"
+        android:textColor="#4b6b7d"
+        android:textSize="17sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toTopOf="parent" />

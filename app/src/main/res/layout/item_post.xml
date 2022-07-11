@@ -30,14 +30,15 @@
 
     <TextView
         android:id="@+id/tvTitle"
-        android:maxLines="1"
-        android:maxLength="20"
-        android:ellipsize="end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLength="20"
+        android:maxLines="1"
         android:text="Lawn Mowing"
+        android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tvPay"
         app:layout_constraintHorizontal_bias="0.0"
@@ -46,24 +47,24 @@
 
     <TextView
         android:id="@+id/tvPay"
-        android:maxLines="1"
-        android:ellipsize="end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="$34"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDistance" />
+        app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/tvDescription"
-        android:maxLines="1"
-        android:ellipsize="end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="30dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="Need someone to mow my lawn."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

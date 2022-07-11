@@ -42,6 +42,7 @@
         <activity android:name=".map.MapsActivity" />
         <activity android:name=".post.PostDetails" />
         <activity android:name=".chat.ChatActivity" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

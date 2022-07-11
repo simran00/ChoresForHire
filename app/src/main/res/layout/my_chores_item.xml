@@ -19,6 +19,7 @@
         android:maxLength="20"
         android:maxLines="1"
         android:text="Lawn Mowing"
+        android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,14 +28,12 @@
         android:id="@+id/myChorePay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="$34"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/myChoreTitle"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/myChoreTitle"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/myChoreDescription"
