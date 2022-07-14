@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.choresforhire.R;
 import com.example.choresforhire.chat.ChatsFragment;
+import com.example.choresforhire.group.AllGroupsFragment;
 import com.example.choresforhire.post.ComposeFragment;
 import com.example.choresforhire.profile.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -34,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.ic_add:
                         fragment = new ComposeFragment();
+                        break;
+                    case R.id.ic_group:
+                        fragment = new AllGroupsFragment();
                         break;
                     case R.id.ic_home:
                         fragment = new HomeFragment();

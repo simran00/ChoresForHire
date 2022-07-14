@@ -313,8 +313,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        ParseQuery.clearAllCachedResults();
-
     }
 
     private void goToLoginActivity() {

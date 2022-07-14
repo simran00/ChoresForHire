@@ -6,13 +6,18 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
+
 @ParseClassName("Post")
 public class Post extends ParseObject {
     public static final String KEY_PAY = "pay";
     public static final String KEY_USER = "user";
     public static final String KEY_TITLE = "title";
+    public static final String KEY_AGE = "overEighteen";
+    public static final String KEY_ONE_TIME = "oneTime";
     public static final String KEY_LOCATION = "location";
     public static final String KEY_ACCEPTED = "accepted";
+    public static final String KEY_RECURRING = "recurring";
     public static final String KEY_COMPLETED = "completedTask";
     public static final String KEY_DESCRIPTION = "description";
     public boolean showMenu = false;
@@ -71,6 +76,30 @@ public class Post extends ParseObject {
 
     public void setCompleted(boolean completedTask) {
         put(KEY_COMPLETED, completedTask);
+    }
+
+    public boolean isAgeRestricted() {
+        return getBoolean(KEY_AGE);
+    }
+
+    public void setAgeRestriction(boolean completedTask) {
+        put(KEY_AGE, completedTask);
+    }
+
+    public boolean isOneTime() {
+        return getBoolean(KEY_ONE_TIME);
+    }
+
+    public void setOneTime(boolean completedTask) {
+        put(KEY_ONE_TIME, completedTask);
+    }
+
+    public boolean isRecurring() {
+        return getBoolean(KEY_RECURRING);
+    }
+
+    public void setRecurring(boolean completedTask) {
+        put(KEY_RECURRING, completedTask);
     }
 
     public boolean isShowMenu() {

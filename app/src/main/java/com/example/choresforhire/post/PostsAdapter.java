@@ -1,6 +1,8 @@
 package com.example.choresforhire.post;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.choresforhire.R;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
@@ -58,6 +62,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvPoster;
         private TextView tvDistance;
         private TextView tvDescription;
+        private ChipGroup chipGroupHome;
         private ConstraintLayout itemPost;
 
         public ViewHolder(@NonNull View itemView) {
@@ -68,6 +73,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvDistance = itemView.findViewById(R.id.tvDistance);
             tvPoster = itemView.findViewById(R.id.tvPoster);
             itemPost = itemView.findViewById(R.id.itemPost);
+            chipGroupHome = itemView.findViewById(R.id.chipGroupHome);
         }
 
         public void bind(Post post) {
@@ -96,6 +102,25 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     }
                 }
             });
+
+            chipGroupHome.removeAllViews();
+            if (post.isAgeRestricted()) {
+                Chip ageRestricted = new Chip(chipGroupHome.getContext());
+                ageRestricted.setText("18+");
+                chipGroupHome.addView(ageRestricted);
+            }
+
+            if (post.isOneTime()) {
+                Chip oneTime = new Chip(chipGroupHome.getContext());
+                oneTime.setText("One-time");
+                chipGroupHome.addView(oneTime);
+            }
+
+            if (post.isRecurring()) {
+                Chip recurring = new Chip(chipGroupHome.getContext());
+                recurring.setText("Recurring");
+                chipGroupHome.addView(recurring);
+            }
 
         }
     }

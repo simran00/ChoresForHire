@@ -1,5 +1,6 @@
 package com.example.choresforhire.chores;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,8 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.choresforhire.post.Post;
+import com.example.choresforhire.post.PostDetails;
 import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.R;
+import com.example.choresforhire.post.SelectListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -24,12 +27,15 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToDoChoresFragment extends Fragment {
+public class ToDoChoresFragment extends Fragment implements SelectListener {
     public static final String TAG = "ToDoChoresFragment";
 
-    private List<Post> allPosts;
-    private ChoresTodoAdapter adapter;
+    private List<Post> mAllTodoPosts;
+    private List<Post> mAllRecPosts;
+    private ChoresTodoAdapter mToDoAdapter;
+    private PostsAdapter mRecAdapter;
     private RecyclerView mTodoPosts;
+    private RecyclerView mRecPosts;
 
     public ToDoChoresFragment() {
         // Required empty public constructor
@@ -49,19 +55,22 @@ public class ToDoChoresFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mTodoPosts = view.findViewById(R.id.rvTodoPosts);
-
-        allPosts = new ArrayList<>();
-        adapter = new ChoresTodoAdapter(getContext(), allPosts);
-
-        // set the layout manager on the recycler view
+        mAllTodoPosts = new ArrayList<>();
+        mToDoAdapter = new ChoresTodoAdapter(getContext(), mAllTodoPosts);
         mTodoPosts.setLayoutManager(new LinearLayoutManager(getContext()));
-        // set the adapter on the recycler view
-        mTodoPosts.setAdapter(adapter);
-        // query posts
-        queryPosts();
+        mTodoPosts.setAdapter(mToDoAdapter);
+        queryTodoPosts();
+
+
+        mRecPosts = view.findViewById(R.id.rvRecommended);
+        mAllRecPosts = new ArrayList<>();
+        mRecAdapter = new PostsAdapter(getContext(), mAllRecPosts, this);
+        mRecPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecPosts.setAdapter(mRecAdapter);
+        queryRecPosts();
     }
 
-    private void queryPosts() {
+    private void queryTodoPosts() {
         // specify what type of data we want to query - Post.class
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         // include data referred by user key
@@ -82,9 +91,38 @@ public class ToDoChoresFragment extends Fragment {
                 }
 
                 // save received posts to list and notify adapter of new data
-                allPosts.addAll(posts);
-                adapter.notifyDataSetChanged();
+                mAllTodoPosts.addAll(posts);
+                mToDoAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    private void queryRecPosts() {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.whereNotEqualTo("user", ParseUser.getCurrentUser());
+        query.whereNotEqualTo("accepted", ParseUser.getCurrentUser());
+        query.addDescendingOrder("createdAt");
+        query.whereWithinMiles("location", ParseUser.getCurrentUser().getParseGeoPoint("location"), 100);
+        query.setLimit(3);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts", e);
+                    return;
+                }
+
+                mAllRecPosts.addAll(posts);
+                mRecAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Override
+    public void onItemClicked(Post post) {
+        Intent i = new Intent(getContext(), PostDetails.class);
+        i.putExtra("post", post);
+        startActivity(i);
     }
 }

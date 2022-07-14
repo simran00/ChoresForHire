@@ -90,12 +90,7 @@ public class MyChoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             "ModalBottomSheet");
                 }
             });
-            ((MenuViewHolder) holder).mEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Edit", Toast.LENGTH_SHORT).show();
-                }
-            });
+
         }
     }
 
@@ -147,12 +142,10 @@ public class MyChoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class MenuViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout mEdit;
         private LinearLayout mTrash;
 
         public MenuViewHolder(View view) {
             super(view);
-            mEdit = itemView.findViewById(R.id.swipeEdit);
             mTrash = itemView.findViewById(R.id.swipeTrash);
         }
     }

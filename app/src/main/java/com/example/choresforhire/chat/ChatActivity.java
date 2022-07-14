@@ -109,9 +109,9 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void setupMessagePosting() {
-        mMessage = (EditText) findViewById(R.id.etMessage);
-        ibSend = (ImageButton) findViewById(R.id.ibSend);
-        rvChat = (RecyclerView) findViewById(R.id.rvChat);
+        mMessage = findViewById(R.id.etMessage);
+        ibSend =  findViewById(R.id.ibSend);
+        rvChat = findViewById(R.id.rvChat);
         mMessages = new ArrayList<>();
         mFirstLoad = true;
         final String userId = ParseUser.getCurrentUser().getObjectId();

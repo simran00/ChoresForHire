@@ -17,9 +17,13 @@ import android.widget.Toast;
 
 import com.example.choresforhire.home.MainActivity;
 import com.example.choresforhire.R;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import java.util.List;
 
 
 public class ComposeFragment extends Fragment {
@@ -27,6 +31,7 @@ public class ComposeFragment extends Fragment {
 
     private Button btnSubmit;
     private EditText composePay;
+    private ChipGroup chipGroup;
     private EditText composeTitle;
     private EditText composeDescription;
 
@@ -45,10 +50,11 @@ public class ComposeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        composeTitle = (EditText) view.findViewById(R.id.composeTitle);
-        composePay = (EditText) view.findViewById(R.id.composePay);
-        composeDescription = (EditText) view.findViewById(R.id.composeDescription);
-        btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
+        composeTitle = view.findViewById(R.id.composeTitle);
+        composePay = view.findViewById(R.id.composePay);
+        composeDescription = view.findViewById(R.id.composeDescription);
+        btnSubmit = view.findViewById(R.id.btnSubmit);
+        chipGroup = view.findViewById(R.id.chipGroupCompose);
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +82,6 @@ public class ComposeFragment extends Fragment {
                 startActivity(i);
             }
         });
-
     }
 
     private void savePost(ParseUser currentUser, String title, Integer pay, String description) {
@@ -86,6 +91,24 @@ public class ComposeFragment extends Fragment {
         post.setDescription(description);
         post.setUser(currentUser);
         post.setLocation(currentUser.getParseGeoPoint("location"));
+
+        // get chips selected
+        List<Integer> ids = chipGroup.getCheckedChipIds();
+        for (Integer id : ids) {
+            Chip chip = chipGroup.findViewById(id);
+            switch (chip.getText().toString()) {
+                case "18+":
+                    post.setAgeRestriction(true);
+                    break;
+                case "One-time":
+                    post.setOneTime(true);
+                    break;
+                case "Recurring":
+                    post.setRecurring(true);
+                    break;
+            }
+        }
+
         post.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

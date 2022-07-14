@@ -80,18 +80,17 @@ public class HomeFragment extends Fragment implements SelectListener {
                 switch (checkedId) {
                     case R.id.recentRadio:
                         statusRadioBtn = true;
-                        queryPostsByTime(statusRadioBtn);
                         break;
                     case R.id.distRadio:
                         statusRadioBtn = false;
-                        queryPostsByTime(statusRadioBtn);
                         break;
                 }
+                queryPostsByTime(statusRadioBtn);
             }
         });
 
 
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeContainer = view.findViewById(R.id.swipeContainer);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -120,7 +119,7 @@ public class HomeFragment extends Fragment implements SelectListener {
         // query posts
         queryPostsByTime(statusRadioBtn);
 
-        btnMap = (FloatingActionButton) view.findViewById(R.id.btnMapReturn);
+        btnMap = view.findViewById(R.id.btnMapReturn);
 
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,7 +171,6 @@ public class HomeFragment extends Fragment implements SelectListener {
     private void queryPostsByTime(boolean statusRadioBtn) {
         // specify what type of data we want to query - Post.class
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
         // include data referred by user key
         query.include(Post.KEY_USER);
         // exclude current user in feed

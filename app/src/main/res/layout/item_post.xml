@@ -5,7 +5,7 @@
     android:id="@+id/itemPost"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="5dp"
     android:background="@drawable/border">
 
     <androidx.cardview.widget.CardView
@@ -62,16 +62,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="30dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Need someone to mow my lawn."
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/otherProfile"
-        app:layout_constraintTop_toBottomOf="@+id/tvPay"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/tvPay" />
 
     <TextView
         android:id="@+id/tvDistance"
@@ -93,4 +90,17 @@
         app:layout_constraintEnd_toEndOf="@+id/otherProfile"
         app:layout_constraintStart_toStartOf="@+id/otherProfile"
         app:layout_constraintTop_toBottomOf="@+id/otherProfile" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupHome"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="-20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPoster"
+        app:layout_constraintStart_toEndOf="@+id/tvPoster"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription"
+        app:singleLine="true">
+
+    </com.google.android.material.chip.ChipGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

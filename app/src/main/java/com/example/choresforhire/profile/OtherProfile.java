@@ -3,6 +3,8 @@ package com.example.choresforhire.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.choresforhire.R;
 import com.example.choresforhire.chores.ChoresTodoAdapter;
 import com.example.choresforhire.chores.MyChoresAdapter;
+import com.example.choresforhire.home.MainActivity;
 import com.example.choresforhire.post.Post;
 import com.example.choresforhire.post.PostDetails;
 import com.example.choresforhire.post.PostsAdapter;
@@ -30,6 +33,7 @@ public class OtherProfile extends AppCompatActivity implements SelectListener {
     public static final String TAG = "OtherProfile";
 
     private ParseUser mOtherUser;
+    private ImageButton mCancel;
     private RecyclerView mTheirChoresView;
     private List<Post> mAllPosts;
     private PostsAdapter mChoresAdapter;
@@ -58,12 +62,21 @@ public class OtherProfile extends AppCompatActivity implements SelectListener {
         mProfileName = findViewById(R.id.profileNameOther);
         mProfileEmail = findViewById(R.id.profileEmailOther);
         mTheirChoresView = findViewById(R.id.rvTheirChores);
+        mCancel = findViewById(R.id.btnProfileExit);
 
         mProfileName.setText(mOtherUser.getUsername());
         mProfileEmail.setText(mOtherUser.getEmail());
 
         mTheirChoresView.setLayoutManager(new LinearLayoutManager(OtherProfile.this));
         mTheirChoresView.setAdapter(mChoresAdapter);
+
+        mCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(OtherProfile.this, MainActivity.class);
+                startActivity(i);
+            }
+        });
 
         queryPosts();
 

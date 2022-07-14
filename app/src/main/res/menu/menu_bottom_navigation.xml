@@ -5,19 +5,25 @@
     <item android:title="Post"
         android:id="@+id/ic_add"
         android:enabled="true"
-        android:icon="@drawable/add_icon"
+        android:icon="@drawable/add_icon2"
+        app:showAsAction="ifRoom" />
+
+    <item android:title="Group"
+        android:id="@+id/ic_group"
+        android:enabled="true"
+        android:icon="@drawable/group_icon"
         app:showAsAction="ifRoom" />
 
     <item android:title="Home"
         android:id="@+id/ic_home"
         android:enabled="true"
-        android:icon="@drawable/home_icon"
+        android:icon="@drawable/home_icon2"
         app:showAsAction="ifRoom" />
 
     <item android:title="Chat"
         android:id="@+id/ic_chat"
         android:enabled="true"
-        android:icon="@drawable/chat_icon"
+        android:icon="@drawable/chat_icon2"
         app:showAsAction="ifRoom" />
 
     <item android:title="Profile"

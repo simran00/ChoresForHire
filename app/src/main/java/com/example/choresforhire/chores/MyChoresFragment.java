@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -19,13 +20,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.choresforhire.post.Post;
-import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.R;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.boltsinternal.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +35,9 @@ import java.util.List;
 public class MyChoresFragment extends Fragment {
     public static final String TAG = "MyChoresFragment";
 
+    private final String MY_CHORES_LABEL = "myChores";
     private List<Post> allPosts;
-    private MyChoresAdapter mChoresadapter;
+    private MyChoresAdapter mChoresAdapter;
     private RecyclerView mMyPosts;
 
     public MyChoresFragment() {
@@ -58,12 +61,12 @@ public class MyChoresFragment extends Fragment {
         mMyPosts = view.findViewById(R.id.rvMyPosts);
 
         allPosts = new ArrayList<>();
-        mChoresadapter = new MyChoresAdapter(getContext(), allPosts);
+        mChoresAdapter = new MyChoresAdapter(getContext(), allPosts);
 
         // set the layout manager on the recycler view
         mMyPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         // set the adapter on the recycler view
-        mMyPosts.setAdapter(mChoresadapter);
+        mMyPosts.setAdapter(mChoresAdapter);
         // query posts
         queryPosts();
 
@@ -79,7 +82,7 @@ public class MyChoresFragment extends Fragment {
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
                 mMyPosts.post(new Runnable() {
                     public void run() {
-                        mChoresadapter.showMenu(viewHolder.getBindingAdapterPosition());
+                        mChoresAdapter.showMenu(viewHolder.getBindingAdapterPosition());
                     }
                 });
             }
@@ -110,7 +113,7 @@ public class MyChoresFragment extends Fragment {
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 mMyPosts.post(new Runnable() {
                     public void run() {
-                        mChoresadapter.closeMenu();
+                        mChoresAdapter.closeMenu();
                     }
                 });
             }
@@ -127,14 +130,14 @@ public class MyChoresFragment extends Fragment {
                         try {
                             object.delete();
                             object.saveInBackground();
-                            mChoresadapter.closeMenu();
+                            mChoresAdapter.closeMenu();
                         } catch (ParseException ex) {
                             ex.printStackTrace();
                         }
                     }
                 });
                 allPosts.remove(deletePost);
-                mChoresadapter.notifyDataSetChanged();
+                mChoresAdapter.notifyDataSetChanged();
                 Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_SHORT).show();
             }
         });
@@ -142,7 +145,7 @@ public class MyChoresFragment extends Fragment {
         getParentFragmentManager().setFragmentResultListener("closeMenu", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
-                mChoresadapter.closeMenu();
+                mChoresAdapter.closeMenu();
             }
         });
     }
@@ -156,21 +159,111 @@ public class MyChoresFragment extends Fragment {
         query.whereEqualTo("user", ParseUser.getCurrentUser());
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
-        // start an asynchronous call for posts
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                // check for errors
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
-                    return;
-                }
 
-                // save received posts to list and notify adapter of new data
+       //  query from cache
+        query.fromPin(MY_CHORES_LABEL).findInBackground().continueWithTask((task) -> {
+            // Update UI with results from Local Datastore
+            ParseException error = (ParseException) task.getError();
+            if (error == null){
+                List<Post> posts = task.getResult();
+                allPosts.clear();
                 allPosts.addAll(posts);
-                mChoresadapter.notifyDataSetChanged();
+                mChoresAdapter.notifyDataSetChanged();
             }
-        });
+            // Now query the network:
+            return query.fromNetwork().findInBackground();
+        }, ContextCompat.getMainExecutor(this.requireContext())).continueWithTask(task -> {
+            // Update UI with results from Network
+            ParseException error = (ParseException) task.getError();
+            if(error == null){
+                List<Post> posts = task.getResult();
+                // Release any objects previously pinned for this query.
+                Post.unpinAllInBackground(MY_CHORES_LABEL, posts, new DeleteCallback() {
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            // There was some error.
+                            return;
+                        }
+
+                        // Add the latest results for this query to the cache.
+                        Post.pinAllInBackground(posts);
+                        allPosts.clear();
+                        allPosts.addAll(posts);
+                        mChoresAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+            return task;
+        }, ContextCompat.getMainExecutor(this.requireContext()));
+
+//        query.fromLocalDatastore().findInBackground()
+//                .continueWithTask((task) -> {
+//                    ParseException error = (ParseException) task.getError();
+//                    if (error != null || task.getResult().size() == 0) {
+//                        return query.fromNetwork().findInBackground();
+//                    }
+//                    Log.d("Cache", "" + task.getResult().size());
+//                    allPosts.clear();
+//                    allPosts.addAll(task.getResult());
+//                    mChoresAdapter.notifyDataSetChanged();
+//                    return task;
+//                }, Task.UI_THREAD_EXECUTOR)
+//                .continueWithTask((task) -> {
+//                    // Update UI with results ...
+//                    Log.d("Network", "" + task.getResult().size());
+//                    ParseException error = (ParseException) task.getError();
+//                    if (error == null) {
+//                        Post.unpinAllInBackground(MY_CHORES_LABEL, task.getResult(), new DeleteCallback() {
+//                        public void done(ParseException e) {
+//                            if (e != null) {
+//                                // There was some error.
+//                                return;
+//                            }
+//
+//                            // Add the latest results for this query to the cache.
+//                            Post.pinAllInBackground(task.getResult());
+//                            allPosts.clear();
+//                            allPosts.addAll(task.getResult());
+//                            mChoresAdapter.notifyDataSetChanged();
+//                        }
+//                    });
+//                    }
+//                    return task;
+//                }, Task.UI_THREAD_EXECUTOR);
+
+
+
+//
+//        query.fromLocalDatastore().findInBackground().continueWithTask((task) -> {
+//            ParseException error = (ParseException) task.getError();
+//            if (error instanceof ParseException && ((ParseException) error).getCode() == ParseException.CACHE_MISS) {
+//                // No results from cache. Let's query the network.
+//                error = (ParseException) task.getError();
+//                if (error == null){
+//                    Log.e(TAG, "Query from network");
+//                    List<Post> posts = task.getResult();
+//                    Post.unpinAllInBackground(MY_CHORES_LABEL, posts, new DeleteCallback() {
+//                        public void done(ParseException e) {
+//                            if (e != null) {
+//                                // There was some error.
+//                                return;
+//                            }
+//
+//                            // Add the latest results for this query to the cache.
+//                            Post.pinAllInBackground(posts);
+//                            allPosts.addAll(posts);
+//                            mChoresAdapter.notifyDataSetChanged();
+//                        }
+//                    });
+//                }
+//                return query.fromNetwork().findInBackground();
+//            }
+//            return task;
+//        }).continueWithTask((task) -> {
+//            return task;
+//        }, ContextCompat.getMainExecutor(this.requireContext()));
+
+
     }
 
 }
