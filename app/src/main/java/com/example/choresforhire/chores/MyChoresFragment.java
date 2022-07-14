@@ -160,6 +160,8 @@ public class MyChoresFragment extends Fragment {
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
 
+
+        // diffutil
        //  query from cache
         query.fromPin(MY_CHORES_LABEL).findInBackground().continueWithTask((task) -> {
             // Update UI with results from Local Datastore
@@ -186,7 +188,7 @@ public class MyChoresFragment extends Fragment {
                         }
 
                         // Add the latest results for this query to the cache.
-                        Post.pinAllInBackground(posts);
+                        Post.pinAllInBackground(MY_CHORES_LABEL, posts);
                         allPosts.clear();
                         allPosts.addAll(posts);
                         mChoresAdapter.notifyDataSetChanged();

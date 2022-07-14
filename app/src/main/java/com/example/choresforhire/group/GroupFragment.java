@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupFragment extends Fragment {
+    private Group currGroup;
     private List<GroupPost> mAllPosts;
     private GroupPostAdapter mGroupPostAdapter;
     private RecyclerView mPostsView;
@@ -39,6 +40,7 @@ public class GroupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        currGroup = getArguments().getParcelable("group");
         return inflater.inflate(R.layout.fragment_group, container, false);
     }
 
@@ -62,7 +64,8 @@ public class GroupFragment extends Fragment {
     private void queryPosts() {
         ParseQuery<GroupPost> query = ParseQuery.getQuery(GroupPost.class);
         query.include(GroupPost.KEY_GROUP);
-//        query.whereEqualTo("group", currGroup);
+        query.include(GroupPost.KEY_USER);
+        query.whereEqualTo("group", currGroup);
         query.addDescendingOrder("createdAt");
         query.findInBackground(new FindCallback<GroupPost>() {
             @Override
