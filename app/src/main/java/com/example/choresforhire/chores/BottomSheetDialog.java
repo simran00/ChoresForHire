@@ -25,15 +25,15 @@ import java.util.List;
 //beter to rename it more descriptive
 public class BottomSheetDialog extends BottomSheetDialogFragment {
     private Post post;
-    //Btsheet (Fragment A) -> Delete -> Notify Parent Fragment (Fragment B)
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
             ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View v = inflater.inflate(R.layout.bottom_sheet_layout,
                 container, false);
 
-        post = (Post) getArguments().getParcelable("post");
+        post = getArguments().getParcelable("post");
 
         Button mDelete = v.findViewById(R.id.btnDelete);
         Button mCancel = v.findViewById(R.id.btnBottomSheetCancel);

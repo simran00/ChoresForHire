@@ -114,8 +114,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                                     @Override
                                     public void done(ParseException e) {
                                         Log.i(TAG, "Group added to user");
+                                        Bundle args = new Bundle();
+                                        args.putParcelable("group", group);
                                         MainActivity activity = (MainActivity) v.getContext();
-                                        activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new GroupFragment()).commit();
+                                        GroupFragment fragment = new GroupFragment();
+                                        fragment.setArguments(args);
+                                        activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, fragment).commit();
                                     }
                                 });
 

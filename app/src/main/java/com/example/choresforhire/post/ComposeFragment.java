@@ -77,9 +77,6 @@ public class ComposeFragment extends Fragment {
                 }
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 savePost(currentUser, title, pay, description);
-
-                Intent i = new Intent(getContext(), CheckAnimation.class);
-                startActivity(i);
             }
         });
     }
@@ -120,6 +117,9 @@ public class ComposeFragment extends Fragment {
                 composeTitle.setText("");
                 composePay.setText("");
                 composeDescription.setText("");
+
+                Intent i = new Intent(getContext(), CheckAnimation.class);
+                startActivity(i);
             }
         });
     }

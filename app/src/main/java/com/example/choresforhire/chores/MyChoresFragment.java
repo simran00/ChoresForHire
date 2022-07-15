@@ -32,6 +32,7 @@ import com.parse.boltsinternal.Task;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class MyChoresFragment extends Fragment {
     public static final String TAG = "MyChoresFragment";
 
@@ -160,8 +161,6 @@ public class MyChoresFragment extends Fragment {
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
 
-
-        // diffutil
        //  query from cache
         query.fromPin(MY_CHORES_LABEL).findInBackground().continueWithTask((task) -> {
             // Update UI with results from Local Datastore
@@ -197,74 +196,6 @@ public class MyChoresFragment extends Fragment {
             }
             return task;
         }, ContextCompat.getMainExecutor(this.requireContext()));
-
-//        query.fromLocalDatastore().findInBackground()
-//                .continueWithTask((task) -> {
-//                    ParseException error = (ParseException) task.getError();
-//                    if (error != null || task.getResult().size() == 0) {
-//                        return query.fromNetwork().findInBackground();
-//                    }
-//                    Log.d("Cache", "" + task.getResult().size());
-//                    allPosts.clear();
-//                    allPosts.addAll(task.getResult());
-//                    mChoresAdapter.notifyDataSetChanged();
-//                    return task;
-//                }, Task.UI_THREAD_EXECUTOR)
-//                .continueWithTask((task) -> {
-//                    // Update UI with results ...
-//                    Log.d("Network", "" + task.getResult().size());
-//                    ParseException error = (ParseException) task.getError();
-//                    if (error == null) {
-//                        Post.unpinAllInBackground(MY_CHORES_LABEL, task.getResult(), new DeleteCallback() {
-//                        public void done(ParseException e) {
-//                            if (e != null) {
-//                                // There was some error.
-//                                return;
-//                            }
-//
-//                            // Add the latest results for this query to the cache.
-//                            Post.pinAllInBackground(task.getResult());
-//                            allPosts.clear();
-//                            allPosts.addAll(task.getResult());
-//                            mChoresAdapter.notifyDataSetChanged();
-//                        }
-//                    });
-//                    }
-//                    return task;
-//                }, Task.UI_THREAD_EXECUTOR);
-
-
-
-//
-//        query.fromLocalDatastore().findInBackground().continueWithTask((task) -> {
-//            ParseException error = (ParseException) task.getError();
-//            if (error instanceof ParseException && ((ParseException) error).getCode() == ParseException.CACHE_MISS) {
-//                // No results from cache. Let's query the network.
-//                error = (ParseException) task.getError();
-//                if (error == null){
-//                    Log.e(TAG, "Query from network");
-//                    List<Post> posts = task.getResult();
-//                    Post.unpinAllInBackground(MY_CHORES_LABEL, posts, new DeleteCallback() {
-//                        public void done(ParseException e) {
-//                            if (e != null) {
-//                                // There was some error.
-//                                return;
-//                            }
-//
-//                            // Add the latest results for this query to the cache.
-//                            Post.pinAllInBackground(posts);
-//                            allPosts.addAll(posts);
-//                            mChoresAdapter.notifyDataSetChanged();
-//                        }
-//                    });
-//                }
-//                return query.fromNetwork().findInBackground();
-//            }
-//            return task;
-//        }).continueWithTask((task) -> {
-//            return task;
-//        }, ContextCompat.getMainExecutor(this.requireContext()));
-
 
     }
 

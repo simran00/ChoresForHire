@@ -12,6 +12,7 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +25,7 @@ import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.R;
 import com.example.choresforhire.post.SelectListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -35,6 +37,7 @@ import java.util.List;
 
 public class HomeFragment extends Fragment implements SelectListener {
     public static final String TAG = "HomeFragment";
+    private final String MY_HOME_LABEL = "myHome";
 
     private List<Post> allPosts;
     private SearchView svSearch;
@@ -183,28 +186,51 @@ public class HomeFragment extends Fragment implements SelectListener {
             // order posts by distance
             query.whereWithinMiles("location", ParseUser.getCurrentUser().getParseGeoPoint("location"), 100);
         }
-        // start an asynchronous call for posts
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                // check for errors
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
-                    return;
-                }
 
+        //  query from cache
+        query.fromPin(MY_HOME_LABEL).findInBackground().continueWithTask((task) -> {
+            // Update UI with results from Local Datastore
+            ParseException error = (ParseException) task.getError();
+            if (error == null){
+                List<Post> posts = task.getResult();
                 allPosts.clear();
-
-                // check if post has already been accepted
                 for (int i = 0; i < posts.size(); i++) {
                     if (posts.get(i).getAccepted() == null) {
                         allPosts.add(posts.get(i));
                     }
                 }
-
                 adapter.notifyDataSetChanged();
             }
-        });
+            // Now query the network:
+            return query.fromNetwork().findInBackground();
+        }, ContextCompat.getMainExecutor(this.requireContext())).continueWithTask(task -> {
+            // Update UI with results from Network
+            ParseException error = (ParseException) task.getError();
+            if(error == null){
+                List<Post> posts = task.getResult();
+                // Release any objects previously pinned for this query.
+                Post.unpinAllInBackground(MY_HOME_LABEL, posts, new DeleteCallback() {
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            // There was some error.
+                            return;
+                        }
+
+                        // Add the latest results for this query to the cache.
+                        Post.pinAllInBackground(MY_HOME_LABEL, posts);
+                        allPosts.clear();
+                        // check if post has already been accepted
+                        for (int i = 0; i < posts.size(); i++) {
+                            if (posts.get(i).getAccepted() == null) {
+                                allPosts.add(posts.get(i));
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+            return task;
+        }, ContextCompat.getMainExecutor(this.requireContext()));
     }
 
     @Override

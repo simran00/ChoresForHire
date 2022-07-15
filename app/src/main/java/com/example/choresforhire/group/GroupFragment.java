@@ -15,19 +15,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.choresforhire.R;
 import com.example.choresforhire.post.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GroupFragment extends Fragment {
     private Group currGroup;
+    private Button mBtnPost;
+    private Button mBtnLeave;
+    private EditText mComposeMessage;
     private List<GroupPost> mAllPosts;
     private GroupPostAdapter mGroupPostAdapter;
     private RecyclerView mPostsView;
@@ -50,6 +57,10 @@ public class GroupFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
+        mBtnPost = view.findViewById(R.id.btnPostGroup);
+        mBtnLeave = view.findViewById(R.id.btnLeaveGroup);
+        mComposeMessage = view.findViewById(R.id.etComposeGroupPost);
+
         mPostsView = view.findViewById(R.id.rvGroupPosts);
 
         mAllPosts = new ArrayList<>();
@@ -59,6 +70,38 @@ public class GroupFragment extends Fragment {
         mPostsView.setAdapter(mGroupPostAdapter);
 
         queryPosts();
+
+        mBtnPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GroupPost post = new GroupPost();
+                post.setUser(ParseUser.getCurrentUser());
+                post.setGroup(currGroup);
+                post.setDescription(mComposeMessage.getText().toString());
+                post.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        Log.i(TAG, "Created post in group!");
+                        queryPosts();
+                    }
+                });
+            }
+        });
+
+        mBtnLeave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseRelation<Group> currGroups = ParseUser.getCurrentUser().getRelation("groupsJoined");
+                currGroups.remove(currGroup);
+                ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        Log.i(TAG, "Removed user");
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new AllGroupsFragment()).commit();
+                    }
+                });
+            }
+        });
     }
 
     private void queryPosts() {
@@ -75,6 +118,7 @@ public class GroupFragment extends Fragment {
                     return;
                 }
 
+                mAllPosts.clear();
                 mAllPosts.addAll(posts);
                 mGroupPostAdapter.notifyDataSetChanged();
             }

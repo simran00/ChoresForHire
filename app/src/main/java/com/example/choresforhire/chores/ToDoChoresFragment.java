@@ -113,7 +113,15 @@ public class ToDoChoresFragment extends Fragment implements SelectListener {
                     return;
                 }
 
-                mAllRecPosts.addAll(posts);
+                mAllRecPosts.clear();
+
+                // check if post has already been accepted
+                for (int i = 0; i < posts.size(); i++) {
+                    if (posts.get(i).getAccepted() == null) {
+                        mAllRecPosts.add(posts.get(i));
+                    }
+                }
+
                 mRecAdapter.notifyDataSetChanged();
             }
         });
