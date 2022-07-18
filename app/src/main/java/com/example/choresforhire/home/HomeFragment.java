@@ -1,11 +1,17 @@
 package com.example.choresforhire.home;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
@@ -25,6 +31,7 @@ import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.R;
 import com.example.choresforhire.post.SelectListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -44,8 +51,8 @@ public class HomeFragment extends Fragment implements SelectListener {
     private PostsAdapter adapter;
     private RecyclerView rvPosts;
     private RadioGroup mSorting;
-    private RadioButton mRecent;
-    private RadioButton mDist;
+    private AutoCompleteTextView mTagOptions;
+    private TextInputLayout mTagMenu;
     private FloatingActionButton btnMap;
     private SwipeRefreshLayout swipeContainer;
 
@@ -77,6 +84,33 @@ public class HomeFragment extends Fragment implements SelectListener {
         svSearch = view.findViewById(R.id.svSearch);
         mSorting = view.findViewById(R.id.sortRadioGroup);
 
+        mTagOptions = view.findViewById(R.id.autoCompleteTag);
+        mTagMenu = view.findViewById(R.id.tagMenu);
+
+        ArrayList<String> mOptions = new ArrayList<>();
+        mOptions.add("18+");
+        mOptions.add("One-time");
+        mOptions.add("Recurring");
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), R.layout.sort_list_item, mOptions);
+        mTagOptions.setAdapter(arrayAdapter);
+
+        mTagOptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    queryPostsByTime(statusRadioBtn, "18+");
+                }
+                if (position == 1) {
+                    queryPostsByTime(statusRadioBtn, "One-time");
+                }
+                if (position == 2) {
+                    queryPostsByTime(statusRadioBtn, "Recurring");
+                }
+            }
+        });
+
+
         mSorting.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -88,7 +122,7 @@ public class HomeFragment extends Fragment implements SelectListener {
                         statusRadioBtn = false;
                         break;
                 }
-                queryPostsByTime(statusRadioBtn);
+                queryPostsByTime(statusRadioBtn, "");
             }
         });
 
@@ -98,10 +132,7 @@ public class HomeFragment extends Fragment implements SelectListener {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
-                queryPostsByTime(statusRadioBtn);
+                queryPostsByTime(statusRadioBtn, "");
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -120,7 +151,7 @@ public class HomeFragment extends Fragment implements SelectListener {
         // set the adapter on the recycler view
         rvPosts.setAdapter(adapter);
         // query posts
-        queryPostsByTime(statusRadioBtn);
+        queryPostsByTime(statusRadioBtn, "");
 
         btnMap = view.findViewById(R.id.btnMapReturn);
 
@@ -171,7 +202,7 @@ public class HomeFragment extends Fragment implements SelectListener {
 
     }
 
-    private void queryPostsByTime(boolean statusRadioBtn) {
+    private void queryPostsByTime(boolean statusRadioBtn, String tag) {
         // specify what type of data we want to query - Post.class
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         // include data referred by user key
@@ -182,9 +213,31 @@ public class HomeFragment extends Fragment implements SelectListener {
         if (statusRadioBtn) {
             // order posts by time created
             query.addDescendingOrder("createdAt");
+            switch (tag) {
+                case "18+":
+                    query.whereEqualTo(Post.KEY_AGE, true);
+                    break;
+                case "One-time":
+                    query.whereEqualTo(Post.KEY_ONE_TIME, true);
+                    break;
+                case "Recurring":
+                    query.whereEqualTo(Post.KEY_RECURRING, true);
+                    break;
+            }
         } else {
             // order posts by distance
             query.whereWithinMiles("location", ParseUser.getCurrentUser().getParseGeoPoint("location"), 100);
+            switch (tag) {
+                case "18+":
+                    query.whereEqualTo(Post.KEY_AGE, true);
+                    break;
+                case "One-time":
+                    query.whereEqualTo(Post.KEY_ONE_TIME, true);
+                    break;
+                case "Recurring":
+                    query.whereEqualTo(Post.KEY_RECURRING, true);
+                    break;
+            }
         }
 
         //  query from cache

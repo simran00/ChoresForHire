@@ -11,11 +11,10 @@
         android:id="@+id/sortRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="30dp"
         android:checkedButton="@+id/recentRadio"
         android:orientation="horizontal"
-        app:layout_constraintStart_toEndOf="@+id/textView9"
-        app:layout_constraintTop_toBottomOf="@+id/svSearch">
+        app:layout_constraintStart_toStartOf="@+id/textView9"
+        app:layout_constraintTop_toBottomOf="@+id/textView9">
 
         <RadioButton
             android:id="@+id/recentRadio"
@@ -30,15 +29,35 @@
             android:text="Nearby" />
     </RadioGroup>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tagMenu"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="30dp"
+        android:hint="Tag"
+        app:layout_constraintEnd_toStartOf="@+id/textView9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView9">
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <TextView
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="8dp"
         android:text="Sort By"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sortRadioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/svSearch" />
 
     <SearchView
         android:id="@+id/svSearch"
@@ -68,10 +87,11 @@
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sortRadioGroup">
+        app:layout_constraintTop_toBottomOf="@+id/tagMenu">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPosts"

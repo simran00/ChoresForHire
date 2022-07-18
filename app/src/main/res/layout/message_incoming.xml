@@ -10,22 +10,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/ivProfileOther"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="48dp"
         android:layout_toRightOf="@+id/ivProfileOther"
         android:paddingBottom="4dp"
         android:text="Johny Lindsey"
         app:layout_constraintBottom_toTopOf="@+id/tvBody"
-        app:layout_constraintStart_toEndOf="@+id/ivProfileOther"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ivProfileOther"
-        android:layout_width="64dp"
+        android:layout_width="0dp"
         android:layout_height="64dp"
         android:layout_alignParentLeft="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:contentDescription="Other profile pic"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvName"
         android:layout_alignLeft="@+id/tvName"
-        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/message_incoming"
         android:elevation="2dp"
         android:paddingHorizontal="16dp"
@@ -43,7 +46,7 @@
         android:text="Someone else's message"
         android:textColor="@color/black"
         android:textSize="18dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ivProfileOther"
-        app:layout_constraintStart_toEndOf="@+id/ivProfileOther"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvName"
         app:layout_constraintTop_toBottomOf="@+id/tvName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

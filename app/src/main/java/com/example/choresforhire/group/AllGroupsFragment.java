@@ -19,7 +19,9 @@ import android.view.ViewGroup;
 
 import com.example.choresforhire.R;
 import com.example.choresforhire.chores.ChoresTodoAdapter;
+import com.example.choresforhire.home.MainActivity;
 import com.example.choresforhire.post.Post;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -29,13 +31,14 @@ import java.util.List;
 
 public class AllGroupsFragment extends Fragment {
     private List<Group> mAllGroups;
-    private GroupAdapter mGroupAdapter;
     private RecyclerView mGroupsView;
+    private GroupAdapter mGroupAdapter;
+
+    private FloatingActionButton btnCreateGroup;
 
     public AllGroupsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,6 +63,18 @@ public class AllGroupsFragment extends Fragment {
         mGroupsView.setAdapter(mGroupAdapter);
         // query posts
         queryGroups();
+
+
+        btnCreateGroup = view.findViewById(R.id.fab_create_group);
+
+        btnCreateGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity activity = (MainActivity) v.getContext();
+                CreateGroupFragment fragment = new CreateGroupFragment();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, fragment).commit();
+            }
+        });
     }
 
     private void queryGroups() {

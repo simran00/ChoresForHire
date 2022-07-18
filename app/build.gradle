@@ -48,7 +48,12 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation "com.airbnb.android:lottie:5.2.0"
 
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation 'com.google.firebase:firebase-analytics'
 
-    api 'com.google.android.material:material:1.7.0-alpha02'
+
+    api 'com.google.android.material:material:1.7.0-alpha03'
 
 }
+
+apply plugin: 'com.google.gms.google-services'

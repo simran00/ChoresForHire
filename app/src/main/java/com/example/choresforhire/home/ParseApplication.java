@@ -7,7 +7,10 @@ import com.example.choresforhire.group.Group;
 import com.example.choresforhire.group.GroupPost;
 import com.example.choresforhire.post.Post;
 import com.parse.Parse;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+
+import java.util.ArrayList;
 
 public class ParseApplication extends Application {
     @Override
@@ -27,5 +30,13 @@ public class ParseApplication extends Application {
                 .server("https://parseapi.back4app.com")
                 .enableLocalDataStore()
                 .build());
+
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add("News");
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+
+        installation.put("GCMSenderId", "830679742091");
+        installation.put("channels", channels);
+        installation.saveInBackground();
     }
 }

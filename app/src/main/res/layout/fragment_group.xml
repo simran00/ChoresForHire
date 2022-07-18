@@ -44,11 +44,14 @@
 
     <Button
         android:id="@+id/btnLeaveGroup"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="2dp"
+        android:textColor="#9A2A2A"
         android:text="Leave"
+        app:strokeColor="#9A2A2A"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

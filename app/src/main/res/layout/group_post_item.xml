@@ -45,25 +45,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="·"
-        app:layout_constraintStart_toEndOf="@+id/tvPostAuthor"
-        app:layout_constraintTop_toTopOf="@+id/tvPostAuthor" />
-
-    <TextView
-        android:id="@+id/tvGroupPostTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="2h"
-        android:textStyle="italic"
-        app:layout_constraintStart_toEndOf="@+id/textView14"
-        app:layout_constraintTop_toBottomOf="@+id/tvGroupNamePost" />
-
-    <TextView
         android:id="@+id/tvGroupPostDes"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

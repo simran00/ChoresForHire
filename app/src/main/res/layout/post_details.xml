@@ -12,9 +12,9 @@
         android:layout_width="71dp"
         android:layout_height="65dp"
         android:layout_gravity="center"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         app:cardCornerRadius="250dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -31,7 +31,7 @@
         android:id="@+id/detailTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="56dp"
         android:layout_marginTop="44dp"
         android:text="Lawn Mowing"
         android:textSize="24sp"
@@ -41,49 +41,59 @@
 
     <TextView
         android:id="@+id/detailDescription"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="56dp"
         android:text="Looking for someone to mow my lawn."
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/detailTitle"
         app:layout_constraintTop_toBottomOf="@+id/detailTitle" />
 
     <TextView
         android:id="@+id/detailPay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
         android:layout_marginTop="44dp"
         android:text="$20"
         android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/detailTitle"
+        android:textColor="#4F7942"
+        app:layout_constraintEnd_toEndOf="@+id/detailDescription"
         app:layout_constraintTop_toBottomOf="@+id/otherProfile" />
 
     <Button
         android:id="@+id/btnAccept"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="48dp"
-        android:backgroundTint="#4F7942"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="52dp"
         android:text="Accept"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailDescription" />
+        android:textColor="#4F7942"
+        app:layout_constraintStart_toStartOf="@+id/detailDescription"
+        app:layout_constraintTop_toBottomOf="@+id/detailDescription"
+        app:strokeColor="#4F7942" />
 
     <Button
         android:id="@+id/btnCancel"
-        style="?attr/materialButtonOutlinedStyle"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="52dp"
         android:text="Cancel"
         android:textColor="#9A2A2A"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.135"
+        app:layout_constraintEnd_toEndOf="@+id/detailDescription"
+        app:layout_constraintHorizontal_bias="0.203"
         app:layout_constraintStart_toEndOf="@+id/btnAccept"
-        app:layout_constraintTop_toBottomOf="@+id/detailDescription"
-        app:strokeColor="#9A2A2A" />
+        app:layout_constraintTop_toBottomOf="@+id/detailDescription" />
+
+    <TextView
+        android:id="@+id/tvPostDetAut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jane"
+        app:layout_constraintEnd_toEndOf="@+id/otherProfile"
+        app:layout_constraintStart_toStartOf="@+id/otherProfile"
+        app:layout_constraintTop_toBottomOf="@+id/otherProfile" />
 </androidx.constraintlayout.widget.ConstraintLayout>

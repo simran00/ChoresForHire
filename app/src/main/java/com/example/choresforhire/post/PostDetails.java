@@ -32,6 +32,7 @@ public class PostDetails extends AppCompatActivity {
 
         TextView detailTitle;
         TextView detailPay;
+        TextView author;
         TextView detailDescription;
         CardView mOtherProfile;
         btnAccept = findViewById(R.id.btnAccept);
@@ -52,10 +53,12 @@ public class PostDetails extends AppCompatActivity {
         detailPay = findViewById(R.id.detailPay);
         detailDescription = findViewById(R.id.detailDescription);
         mOtherProfile = findViewById(R.id.otherProfile);
+        author = findViewById(R.id.tvPostDetAut);
 
         detailTitle.setText(post.getTitle());
         detailPay.setText("$" + post.getPay());
         detailDescription.setText(post.getDescription());
+        author.setText(post.getUser().getUsername());
 
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override

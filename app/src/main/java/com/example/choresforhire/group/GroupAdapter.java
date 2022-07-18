@@ -24,6 +24,7 @@ import com.example.choresforhire.R;
 import com.example.choresforhire.home.MainActivity;
 import com.example.choresforhire.post.PostDetails;
 import com.example.choresforhire.profile.OtherProfile;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -68,9 +69,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
+        private Button btnJoin;
         private TextView groupName;
         private TextView groupDescription;
-        private Button btnJoin;
 
         public GroupViewHolder(@NonNull View view) {
             super(view);

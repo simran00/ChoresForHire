@@ -23,6 +23,12 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.HashMap;
+
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
+
 import java.util.List;
 
 
@@ -77,6 +83,7 @@ public class ComposeFragment extends Fragment {
                 }
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 savePost(currentUser, title, pay, description);
+
             }
         });
     }
@@ -117,6 +124,22 @@ public class ComposeFragment extends Fragment {
                 composeTitle.setText("");
                 composePay.setText("");
                 composeDescription.setText("");
+
+                final HashMap<String, String> params = new HashMap<>();
+                // Calling the cloud code function
+                ParseCloud.callFunctionInBackground("pushsample", params, new FunctionCallback<Object>() {
+                    @Override
+                    public void done(Object response, ParseException exc) {
+                        if(exc == null) {
+                            // The function was executed
+                            Log.e(TAG, "Successfully pushed");
+                        }
+                        else {
+                            // Something went wrong
+                            Toast.makeText(getContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
 
                 Intent i = new Intent(getContext(), CheckAnimation.class);
                 startActivity(i);
