@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.choresforhire.R;
 import com.example.choresforhire.post.Post;
@@ -22,48 +24,24 @@ import com.parse.ParseQuery;
 
 import java.util.List;
 
-//beter to rename it more descriptive
 public class BottomSheetDialog extends BottomSheetDialogFragment {
     private Post post;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
             ViewGroup container, @Nullable Bundle savedInstanceState) {
+        /*
+        1. Create Bottomsheet Controller -> 2 click handler -> expose 2 method: 1 onDeleteClicked 2. OnClickClicked
+        2. Create BottomSheet View -> layout -> inflate, populate buttons
+        3. In BottomSheetView, have a new method called initBottomSheet(Controller) -> hook up onCLick to Controller corresponding onCLick(onDeleteClicked/onCancelClick)
 
-        View v = inflater.inflate(R.layout.bottom_sheet_layout,
-                container, false);
+         */
 
         post = getArguments().getParcelable("post");
 
-        Button mDelete = v.findViewById(R.id.btnDelete);
-        Button mCancel = v.findViewById(R.id.btnBottomSheetCancel);
-
-        // Notify parent fragment
-        mDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (post != null) {
-                    Bundle result = new Bundle();
-                    result.putParcelable("post", post);
-                    getParentFragmentManager().setFragmentResult("postDelete", result);
-                }
-                dismiss();
-
-            }
-        });
-
-        mCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (post != null) {
-                    Bundle result = new Bundle();
-                    result.putParcelable("post", post);
-                    getParentFragmentManager().setFragmentResult("closeMenu", result);
-                }
-                dismiss();
-            }
-        });
-        return v;
+        BottomSheetController controller = new BottomSheetController(this);
+        BottomSheetView btmSheetView = new BottomSheetView(inflater, container, post);
+        btmSheetView.initBottomSheetListener(controller);
+        return btmSheetView.getView();
     }
 }
