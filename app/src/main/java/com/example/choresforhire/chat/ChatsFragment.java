@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.example.choresforhire.R;
 import com.example.choresforhire.post.Post;
 import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.post.SelectListener;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -31,9 +33,10 @@ import java.util.List;
 
 public class ChatsFragment extends Fragment implements SelectListenerChat {
     public static final String TAG = "ChatsFragment";
+    private static final String CHAT_LABEL = "myChats";
 
-    private List<ParseUser> allChats;
-    private ThreadAdapter adapter;
+    private List<ParseUser> mAllChats;
+    private ThreadAdapter mThreadAdapter;
     private RecyclerView mChats;
 
     public ChatsFragment() {
@@ -55,12 +58,12 @@ public class ChatsFragment extends Fragment implements SelectListenerChat {
 
         mChats = view.findViewById(R.id.rvChatThreads);
 
-        allChats = new ArrayList<>();
-        adapter = new ThreadAdapter(getContext(), allChats, this);
+        mAllChats = new ArrayList<>();
+        mThreadAdapter = new ThreadAdapter(getContext(), mAllChats, this);
 
         mChats.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mChats.setAdapter(adapter);
+        mChats.setAdapter(mThreadAdapter);
 
         queryChatUsers();
 
@@ -68,18 +71,42 @@ public class ChatsFragment extends Fragment implements SelectListenerChat {
 
     private void queryChatUsers() {
         ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
-        query.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> users, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting chats", e);
-                    return;
-                }
-                allChats.addAll(users);
-                adapter.notifyDataSetChanged();
-            }
-        });
 
+        //  query from cache
+        query.fromPin(CHAT_LABEL).findInBackground().continueWithTask((task) -> {
+            // Update UI with results from Local Datastore
+            ParseException error = (ParseException) task.getError();
+            if (error == null){
+                List<ParseUser> users = task.getResult();
+                mAllChats.clear();
+                mAllChats.addAll(users);
+                mThreadAdapter.notifyDataSetChanged();
+            }
+            // Now query the network:
+            return query.fromNetwork().findInBackground();
+        }, ContextCompat.getMainExecutor(this.requireContext())).continueWithTask(task -> {
+            // Update UI with results from Network
+            ParseException error = (ParseException) task.getError();
+            if(error == null){
+                List<ParseUser> users = task.getResult();
+                // Release any objects previously pinned for this query.
+                Post.unpinAllInBackground(CHAT_LABEL, users, new DeleteCallback() {
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            // There was some error.
+                            return;
+                        }
+
+                        // Add the latest results for this query to the cache.
+                        Post.pinAllInBackground(CHAT_LABEL, users);
+                        mAllChats.clear();
+                        mAllChats.addAll(users);
+                        mThreadAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+            return task;
+        }, ContextCompat.getMainExecutor(this.requireContext()));
 
     }
 

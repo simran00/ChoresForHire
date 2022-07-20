@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,14 +23,17 @@ import com.example.choresforhire.chores.ChoresTodoAdapter;
 import com.example.choresforhire.home.MainActivity;
 import com.example.choresforhire.post.Post;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AllGroupsFragment extends Fragment {
+    private static final String GROUP_LABEL = "allGroups";
     private List<Group> mAllGroups;
     private RecyclerView mGroupsView;
     private GroupAdapter mGroupAdapter;
@@ -79,16 +83,41 @@ public class AllGroupsFragment extends Fragment {
 
     private void queryGroups() {
         ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
-        query.findInBackground(new FindCallback<Group>() {
-            @Override
-            public void done(List<Group> groups, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting chats", e);
-                    return;
-                }
+
+        //  query from cache
+        query.fromPin(GROUP_LABEL).findInBackground().continueWithTask((task) -> {
+            // Update UI with results from Local Datastore
+            ParseException error = (ParseException) task.getError();
+            if (error == null){
+                List<Group> groups = task.getResult();
+                mAllGroups.clear();
                 mAllGroups.addAll(groups);
                 mGroupAdapter.notifyDataSetChanged();
             }
-        });
+            // Now query the network:
+            return query.fromNetwork().findInBackground();
+        }, ContextCompat.getMainExecutor(this.requireContext())).continueWithTask(task -> {
+            // Update UI with results from Network
+            ParseException error = (ParseException) task.getError();
+            if(error == null){
+                List<Group> groups = task.getResult();
+                // Release any objects previously pinned for this query.
+                Post.unpinAllInBackground(GROUP_LABEL, groups, new DeleteCallback() {
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            // There was some error.
+                            return;
+                        }
+
+                        // Add the latest results for this query to the cache.
+                        Post.pinAllInBackground(GROUP_LABEL, groups);
+                        mAllGroups.clear();
+                        mAllGroups.addAll(groups);
+                        mGroupAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+            return task;
+        }, ContextCompat.getMainExecutor(this.requireContext()));
     }
 }

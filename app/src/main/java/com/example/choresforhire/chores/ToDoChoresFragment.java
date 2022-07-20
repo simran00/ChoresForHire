@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,7 @@ import com.example.choresforhire.post.PostDetails;
 import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.R;
 import com.example.choresforhire.post.SelectListener;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -29,6 +31,8 @@ import java.util.List;
 
 public class ToDoChoresFragment extends Fragment implements SelectListener {
     public static final String TAG = "ToDoChoresFragment";
+    private static final String TODO_CHORES_LABEL = "todoChores";
+    private static final String REC_POSTS_LABEL = "recPosts";
 
     private List<Post> mAllTodoPosts;
     private List<Post> mAllRecPosts;
@@ -81,20 +85,42 @@ public class ToDoChoresFragment extends Fragment implements SelectListener {
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
         // start an asynchronous call for posts
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                // check for errors
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
-                    return;
-                }
 
-                // save received posts to list and notify adapter of new data
+        //  query from cache
+        query.fromPin(TODO_CHORES_LABEL).findInBackground().continueWithTask((task) -> {
+            // Update UI with results from Local Datastore
+            ParseException error = (ParseException) task.getError();
+            if (error == null){
+                List<Post> posts = task.getResult();
+                mAllTodoPosts.clear();
                 mAllTodoPosts.addAll(posts);
                 mToDoAdapter.notifyDataSetChanged();
             }
-        });
+            // Now query the network:
+            return query.fromNetwork().findInBackground();
+        }, ContextCompat.getMainExecutor(this.requireContext())).continueWithTask(task -> {
+            // Update UI with results from Network
+            ParseException error = (ParseException) task.getError();
+            if(error == null){
+                List<Post> posts = task.getResult();
+                // Release any objects previously pinned for this query.
+                Post.unpinAllInBackground(TODO_CHORES_LABEL, posts, new DeleteCallback() {
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            // There was some error.
+                            return;
+                        }
+
+                        // Add the latest results for this query to the cache.
+                        Post.pinAllInBackground(TODO_CHORES_LABEL, posts);
+                        mAllTodoPosts.clear();
+                        mAllTodoPosts.addAll(posts);
+                        mToDoAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+            return task;
+        }, ContextCompat.getMainExecutor(this.requireContext()));
     }
 
     private void queryRecPosts() {
@@ -105,26 +131,51 @@ public class ToDoChoresFragment extends Fragment implements SelectListener {
         query.addDescendingOrder("createdAt");
         query.whereWithinMiles("location", ParseUser.getCurrentUser().getParseGeoPoint("location"), 100);
         query.setLimit(3);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
-                    return;
-                }
-
+        //  query from cache
+        query.fromPin(REC_POSTS_LABEL).findInBackground().continueWithTask((task) -> {
+            // Update UI with results from Local Datastore
+            ParseException error = (ParseException) task.getError();
+            if (error == null){
+                List<Post> posts = task.getResult();
                 mAllRecPosts.clear();
-
-                // check if post has already been accepted
                 for (int i = 0; i < posts.size(); i++) {
                     if (posts.get(i).getAccepted() == null) {
                         mAllRecPosts.add(posts.get(i));
                     }
                 }
-
                 mRecAdapter.notifyDataSetChanged();
             }
-        });
+            // Now query the network:
+            return query.fromNetwork().findInBackground();
+        }, ContextCompat.getMainExecutor(this.requireContext())).continueWithTask(task -> {
+            // Update UI with results from Network
+            ParseException error = (ParseException) task.getError();
+            if(error == null){
+                List<Post> posts = task.getResult();
+                // Release any objects previously pinned for this query.
+                Post.unpinAllInBackground(REC_POSTS_LABEL, posts, new DeleteCallback() {
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            // There was some error.
+                            return;
+                        }
+
+                        // Add the latest results for this query to the cache.
+                        Post.pinAllInBackground(REC_POSTS_LABEL, posts);
+                        mAllRecPosts.clear();
+                        // check if post has already been accepted
+                        for (int i = 0; i < posts.size(); i++) {
+                            if (posts.get(i).getAccepted() == null) {
+                                mAllRecPosts.add(posts.get(i));
+                            }
+                        }
+                        mRecAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+            return task;
+        }, ContextCompat.getMainExecutor(this.requireContext()));
+
     }
 
     @Override
