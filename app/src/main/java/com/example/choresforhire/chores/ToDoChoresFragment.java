@@ -28,6 +28,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ToDoChoresFragment extends Fragment implements SelectListener {
     public static final String TAG = "ToDoChoresFragment";
@@ -63,15 +64,15 @@ public class ToDoChoresFragment extends Fragment implements SelectListener {
         mToDoAdapter = new ChoresTodoAdapter(getContext(), mAllTodoPosts);
         mTodoPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         mTodoPosts.setAdapter(mToDoAdapter);
-        queryTodoPosts();
-
 
         mRecPosts = view.findViewById(R.id.rvRecommended);
         mAllRecPosts = new ArrayList<>();
         mRecAdapter = new PostsAdapter(getContext(), mAllRecPosts, this);
         mRecPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecPosts.setAdapter(mRecAdapter);
-        queryRecPosts();
+
+        queryTodoPosts();
+
     }
 
     private void queryTodoPosts() {
@@ -84,14 +85,22 @@ public class ToDoChoresFragment extends Fragment implements SelectListener {
         query.whereEqualTo("accepted", ParseUser.getCurrentUser());
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
-        // start an asynchronous call for posts
 
+        cacheToDo(query);
+    }
+
+    private void cacheToDo(ParseQuery<Post> query) {
         //  query from cache
         query.fromPin(TODO_CHORES_LABEL).findInBackground().continueWithTask((task) -> {
             // Update UI with results from Local Datastore
             ParseException error = (ParseException) task.getError();
             if (error == null){
                 List<Post> posts = task.getResult();
+
+                // query recommended based on tasks already accepted
+                queryRecPosts(posts);
+
+
                 mAllTodoPosts.clear();
                 mAllTodoPosts.addAll(posts);
                 mToDoAdapter.notifyDataSetChanged();
@@ -123,14 +132,32 @@ public class ToDoChoresFragment extends Fragment implements SelectListener {
         }, ContextCompat.getMainExecutor(this.requireContext()));
     }
 
-    private void queryRecPosts() {
+    private void queryRecPosts(List<Post> toDoPosts) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.whereNotEqualTo("user", ParseUser.getCurrentUser());
         query.whereNotEqualTo("accepted", ParseUser.getCurrentUser());
         query.addDescendingOrder("createdAt");
-        query.whereWithinMiles("location", ParseUser.getCurrentUser().getParseGeoPoint("location"), 100);
         query.setLimit(3);
+
+        if (toDoPosts.isEmpty()) {
+            query.whereWithinMiles("location", ParseUser.getCurrentUser().getParseGeoPoint("location"), 100);
+        } else {
+            Random rand = new Random();
+            int randIndex = rand.nextInt(toDoPosts.size());
+            if (toDoPosts.get(randIndex).isAgeRestricted()) {
+                query.whereEqualTo("overEighteen", true);
+            } else if (toDoPosts.get(randIndex).isOneTime()) {
+                query.whereEqualTo("oneTime", true);
+            } else if (toDoPosts.get(randIndex).isRecurring()) {
+                query.whereEqualTo("recurring", true);
+            }
+        }
+        cacheRec(query);
+
+    }
+
+    private void cacheRec(ParseQuery<Post> query) {
         //  query from cache
         query.fromPin(REC_POSTS_LABEL).findInBackground().continueWithTask((task) -> {
             // Update UI with results from Local Datastore
@@ -175,7 +202,6 @@ public class ToDoChoresFragment extends Fragment implements SelectListener {
             }
             return task;
         }, ContextCompat.getMainExecutor(this.requireContext()));
-
     }
 
     @Override
