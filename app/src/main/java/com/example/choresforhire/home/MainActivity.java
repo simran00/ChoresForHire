@@ -1,7 +1,9 @@
 package com.example.choresforhire.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,8 +15,16 @@ import com.example.choresforhire.chat.ChatsFragment;
 import com.example.choresforhire.group.AllGroupsFragment;
 import com.example.choresforhire.post.ComposeFragment;
 import com.example.choresforhire.profile.ProfileFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.parse.Parse;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
@@ -24,6 +34,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        FirebaseMessaging.getInstance().getToken()
+//                .addOnCompleteListener(new OnCompleteListener<String>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<String> task) {
+//                        if (!task.isSuccessful()) {
+//                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+//                            return;
+//                        }
+//
+//                        // Get new FCM registration token
+//                        String token = task.getResult();
+//
+//                        // Log and toast
+//                        Log.d(TAG, token);
+//                        Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 

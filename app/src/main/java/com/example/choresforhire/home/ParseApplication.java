@@ -1,14 +1,17 @@
 package com.example.choresforhire.home;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.example.choresforhire.chat.Message;
 import com.example.choresforhire.group.Group;
 import com.example.choresforhire.group.GroupPost;
 import com.example.choresforhire.post.Post;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 
@@ -31,12 +34,8 @@ public class ParseApplication extends Application {
                 .enableLocalDataStore()
                 .build());
 
-        ArrayList<String> channels = new ArrayList<>();
-        channels.add("News");
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-
         installation.put("GCMSenderId", "830679742091");
-        installation.put("channels", channels);
         installation.saveInBackground();
     }
 }

@@ -19,15 +19,22 @@ import com.example.choresforhire.home.MainActivity;
 import com.example.choresforhire.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -119,30 +126,30 @@ public class ComposeFragment extends Fragment {
                 if (e != null) {
                     Log.e(TAG, "Error while saving", e);
                     Toast.makeText(getContext(), "Error while saving!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 Log.i(TAG, "Post was successful!");
                 composeTitle.setText("");
                 composePay.setText("");
                 composeDescription.setText("");
 
-                final HashMap<String, String> params = new HashMap<>();
-                // Calling the cloud code function
-                ParseCloud.callFunctionInBackground("pushsample", params, new FunctionCallback<Object>() {
-                    @Override
-                    public void done(Object response, ParseException exc) {
-                        if(exc == null) {
-                            // The function was executed
-                            Log.e(TAG, "Successfully pushed");
-                        }
-                        else {
-                            // Something went wrong
-                            Toast.makeText(getContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
                 Intent i = new Intent(getContext(), CheckAnimation.class);
                 startActivity(i);
+                getActivity().finish();
+
+                JSONObject data = new JSONObject();
+                // Put data in the JSON object
+                try {
+                    data.put("alert", post.getTitle());
+                    data.put("title", "New Chore");
+                } catch ( JSONException error) {
+                    // should not happen
+                    throw new IllegalArgumentException("unexpected parsing error", error);
+                }
+                // Configure the push
+                ParsePush push = new ParsePush();
+                push.setData(data);
+                push.sendInBackground();
             }
         });
     }

@@ -4,6 +4,7 @@ pluginManagement {
         google()
         mavenCentral()
     }
+
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -13,5 +14,6 @@ dependencyResolutionManagement {
         maven { url "https://jitpack.io" }
     }
 }
+
 rootProject.name = "ChoresForHire"
 include ':app'

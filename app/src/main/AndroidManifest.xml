@@ -25,13 +25,21 @@
         android:theme="@style/Theme.ChoresForHire"
         tools:targetApi="31">
 
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <meta-data android:name="com.parse.push.gcm_sender_id"
+            android:value="830679742091" />
+
         <activity
             android:name=".login.LoginActivity"
             android:exported="true">
@@ -40,34 +48,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".home.MainActivity">
-        </activity>
-        <activity android:name=".login.SignupActivity">
-        </activity>
+
+        <activity android:name=".home.MainActivity" />
+
+        <activity android:name=".login.SignupActivity" />
+
         <activity android:name=".map.MapsActivity" />
         <activity android:name=".post.PostDetails" />
         <activity android:name=".chat.ChatActivity" />
         <activity android:name=".post.CheckAnimation" />
         <activity android:name=".profile.OtherProfile" />
 
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
 
-<!--        <service-->
-<!--            android:name="com.parse.fcm.ParseFirebaseInstanceIdService"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
-
-<!--        <service-->
-<!--            android:name="com.parse.fcm.ParseFirebaseMessagingService">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.firebase.MESSAGING_EVENT"/>-->
-<!--            </intent-filter>-->
-<!--        </service>-->
+        <service
+            android:name="com.parse.fcm.ParseFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
 
         <receiver
             android:name="com.parse.ParsePushBroadcastReceiver"
@@ -79,8 +78,6 @@
             </intent-filter>
         </receiver>
 
-        <meta-data android:name="com.parse.push.gcm_sender_id"
-            android:value="830679742091" />
     </application>
 
 </manifest>

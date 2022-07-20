@@ -34,6 +34,7 @@ public class CheckAnimation extends AppCompatActivity {
             public void onAnimationEnd(Animator animation) {
                 Intent i = new Intent(CheckAnimation.this, MainActivity.class);
                 startActivity(i);
+                finish();
             }
 
             @Override
