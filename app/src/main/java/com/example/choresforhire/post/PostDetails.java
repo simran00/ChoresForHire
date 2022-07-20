@@ -15,8 +15,14 @@ import com.example.choresforhire.home.MainActivity;
 import com.example.choresforhire.R;
 import com.example.choresforhire.profile.OtherProfile;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class PostDetails extends AppCompatActivity {
     public static final String TAG = "PostsDetails";
@@ -74,6 +80,7 @@ public class PostDetails extends AppCompatActivity {
                     }
                 });
 
+                pushNotification();
             }
         });
 
@@ -93,5 +100,26 @@ public class PostDetails extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+
+    private void pushNotification() {
+        JSONObject data = new JSONObject();
+        // Put data in the JSON object
+        try {
+            data.put("alert", post.getAccepted().getUsername() + " accepted your chore!");
+            data.put("title", "Accepted: " + post.getTitle());
+        } catch ( JSONException error) {
+            // should not happen
+            throw new IllegalArgumentException("unexpected parsing error", error);
+        }
+
+        // Configure the push
+        ParsePush push = new ParsePush();
+        // push to post author
+        ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
+        query.whereEqualTo("user", post.getUser());
+        push.setQuery(query);
+        push.setData(data);
+        push.sendInBackground();
     }
 }

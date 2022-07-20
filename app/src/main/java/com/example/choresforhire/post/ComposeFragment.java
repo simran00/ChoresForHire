@@ -23,6 +23,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -146,8 +147,13 @@ public class ComposeFragment extends Fragment {
                     // should not happen
                     throw new IllegalArgumentException("unexpected parsing error", error);
                 }
+
                 // Configure the push
                 ParsePush push = new ParsePush();
+                // push to all users except current user
+                ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
+                query.whereNotEqualTo("user", ParseUser.getCurrentUser());
+                push.setQuery(query);
                 push.setData(data);
                 push.sendInBackground();
             }

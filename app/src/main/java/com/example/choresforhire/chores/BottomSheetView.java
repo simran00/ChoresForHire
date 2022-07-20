@@ -12,32 +12,32 @@ import com.example.choresforhire.R;
 import com.example.choresforhire.post.Post;
 
 public class BottomSheetView {
+    Post mPost;
     Button mDelete;
     Button mCancel;
-    Post post;
-    View bottomSheetView;
+    View mBottomSheetView;
 
     public BottomSheetView(LayoutInflater inflater, @Nullable
             ViewGroup container, Post post) {
-        bottomSheetView = inflater.inflate(R.layout.bottom_sheet_layout, container, false);
+        mBottomSheetView = inflater.inflate(R.layout.bottom_sheet_layout, container, false);
 
-        mDelete = bottomSheetView.findViewById(R.id.btnDelete);
-        mCancel = bottomSheetView.findViewById(R.id.btnBottomSheetCancel);
-        this.post = post;
+        mDelete = mBottomSheetView.findViewById(R.id.btnDelete);
+        mCancel = mBottomSheetView.findViewById(R.id.btnBottomSheetCancel);
+        this.mPost = post;
 
     }
 
     public View getView() {
-        return bottomSheetView;
+        return mBottomSheetView;
     }
 
     public void initBottomSheetListener(BottomSheetController controller) {
-        mDelete.setOnClickListener(v -> controller.onDeleteClicked(post));
+        mDelete.setOnClickListener(v -> controller.onDeleteClicked(mPost));
 
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                controller.onCancelClicked(post);
+                controller.onCancelClicked(mPost);
             }
         });
     }

@@ -11,6 +11,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
@@ -36,6 +37,9 @@ public class ParseApplication extends Application {
 
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
         installation.put("GCMSenderId", "830679742091");
+        if (ParseUser.getCurrentUser() != null) {
+            installation.put("user", ParseUser.getCurrentUser());
+        }
         installation.saveInBackground();
     }
 }
