@@ -89,14 +89,21 @@ public class ComposeFragment extends Fragment {
                     Toast.makeText(getContext(), "Description cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                List<Integer> chipsChecked = chipGroup.getCheckedChipIds();
+
+                if (chipsChecked.isEmpty()) {
+                    Toast.makeText(getContext(), "Choose a tag", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 ParseUser currentUser = ParseUser.getCurrentUser();
-                savePost(currentUser, title, pay, description);
+                savePost(currentUser, title, pay, description, chipsChecked);
 
             }
         });
     }
 
-    private void savePost(ParseUser currentUser, String title, Integer pay, String description) {
+    private void savePost(ParseUser currentUser, String title, Integer pay, String description, List<Integer> chipsChecked) {
         Post post = new Post();
         post.setTitle(title);
         post.setPay(pay);
@@ -104,9 +111,8 @@ public class ComposeFragment extends Fragment {
         post.setUser(currentUser);
         post.setLocation(currentUser.getParseGeoPoint("location"));
 
-        // get chips selected
-        List<Integer> ids = chipGroup.getCheckedChipIds();
-        for (Integer id : ids) {
+        // set chips selected
+        for (Integer id : chipsChecked) {
             Chip chip = chipGroup.findViewById(id);
             switch (chip.getText().toString()) {
                 case "18+":

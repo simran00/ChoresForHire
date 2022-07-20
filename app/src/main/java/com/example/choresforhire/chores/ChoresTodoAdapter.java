@@ -19,8 +19,14 @@ import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.post.SelectListener;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -101,6 +107,7 @@ public class ChoresTodoAdapter extends RecyclerView.Adapter<ChoresTodoAdapter.To
                                 Toast.makeText(v.getContext(), "Finished!", Toast.LENGTH_SHORT).show();
                             }
                         });
+                        pushNotification(post);
                     } else {
                         post.setCompleted(false);
                         post.saveInBackground(new SaveCallback() {
@@ -113,6 +120,27 @@ public class ChoresTodoAdapter extends RecyclerView.Adapter<ChoresTodoAdapter.To
                 }
             });
         }
+    }
+
+    private void pushNotification(Post post) {
+        JSONObject data = new JSONObject();
+        // Put data in the JSON object
+        try {
+            data.put("alert", post.getAccepted().getUsername() + " completed your chore!");
+            data.put("title", "Completed: " + post.getTitle());
+        } catch ( JSONException error) {
+            // should not happen
+            throw new IllegalArgumentException("unexpected parsing error", error);
+        }
+
+        // Configure the push
+        ParsePush push = new ParsePush();
+        // push to post author
+        ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
+        query.whereEqualTo("user", post.getUser());
+        push.setQuery(query);
+        push.setData(data);
+        push.sendInBackground();
     }
 
     public void clear() {
