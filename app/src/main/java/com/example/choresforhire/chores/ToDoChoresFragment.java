@@ -32,15 +32,15 @@ import java.util.Random;
 
 public class ToDoChoresFragment extends Fragment implements SelectListener {
     public static final String TAG = "ToDoChoresFragment";
-    private static final String TODO_CHORES_LABEL = "todoChores";
     private static final String REC_POSTS_LABEL = "recPosts";
+    private static final String TODO_CHORES_LABEL = "todoChores";
 
-    private List<Post> mAllTodoPosts;
-    private List<Post> mAllRecPosts;
-    private ChoresTodoAdapter mToDoAdapter;
-    private PostsAdapter mRecAdapter;
-    private RecyclerView mTodoPosts;
     private RecyclerView mRecPosts;
+    private RecyclerView mTodoPosts;
+    private List<Post> mAllRecPosts;
+    private List<Post> mAllTodoPosts;
+    private PostsAdapter mRecAdapter;
+    private ChoresTodoAdapter mToDoAdapter;
 
     public ToDoChoresFragment() {
         // Required empty public constructor

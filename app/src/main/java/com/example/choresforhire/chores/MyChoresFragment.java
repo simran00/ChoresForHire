@@ -35,11 +35,11 @@ import java.util.List;
 
 public class MyChoresFragment extends Fragment {
     public static final String TAG = "MyChoresFragment";
-
     private final String MY_CHORES_LABEL = "myChores";
-    private List<Post> allPosts;
-    private MyChoresAdapter mChoresAdapter;
+
+    private List<Post> mAllPosts;
     private RecyclerView mMyPosts;
+    private MyChoresAdapter mChoresAdapter;
 
     public MyChoresFragment() {
         // Required empty public constructor
@@ -61,8 +61,8 @@ public class MyChoresFragment extends Fragment {
 
         mMyPosts = view.findViewById(R.id.rvMyPosts);
 
-        allPosts = new ArrayList<>();
-        mChoresAdapter = new MyChoresAdapter(getContext(), allPosts);
+        mAllPosts = new ArrayList<>();
+        mChoresAdapter = new MyChoresAdapter(getContext(), mAllPosts);
 
         // set the layout manager on the recycler view
         mMyPosts.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -137,7 +137,7 @@ public class MyChoresFragment extends Fragment {
                         }
                     }
                 });
-                allPosts.remove(deletePost);
+                mAllPosts.remove(deletePost);
                 mChoresAdapter.notifyDataSetChanged();
                 Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_SHORT).show();
             }
@@ -167,8 +167,8 @@ public class MyChoresFragment extends Fragment {
             ParseException error = (ParseException) task.getError();
             if (error == null){
                 List<Post> posts = task.getResult();
-                allPosts.clear();
-                allPosts.addAll(posts);
+                mAllPosts.clear();
+                mAllPosts.addAll(posts);
                 mChoresAdapter.notifyDataSetChanged();
             }
             // Now query the network:
@@ -188,8 +188,8 @@ public class MyChoresFragment extends Fragment {
 
                         // Add the latest results for this query to the cache.
                         Post.pinAllInBackground(MY_CHORES_LABEL, posts);
-                        allPosts.clear();
-                        allPosts.addAll(posts);
+                        mAllPosts.clear();
+                        mAllPosts.addAll(posts);
                         mChoresAdapter.notifyDataSetChanged();
                     }
                 });

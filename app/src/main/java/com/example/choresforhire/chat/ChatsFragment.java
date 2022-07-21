@@ -35,9 +35,9 @@ public class ChatsFragment extends Fragment implements SelectListenerChat {
     public static final String TAG = "ChatsFragment";
     private static final String CHAT_LABEL = "myChats";
 
+    private RecyclerView mChats;
     private List<ParseUser> mAllChats;
     private ThreadAdapter mThreadAdapter;
-    private RecyclerView mChats;
 
     public ChatsFragment() {
         // Required empty public constructor

@@ -34,6 +34,7 @@ import java.util.List;
 
 public class AllGroupsFragment extends Fragment {
     private static final String GROUP_LABEL = "allGroups";
+
     private List<Group> mAllGroups;
     private RecyclerView mGroupsView;
     private GroupAdapter mGroupAdapter;

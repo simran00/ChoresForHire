@@ -43,9 +43,9 @@ import java.util.List;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = "MapsActivity";
 
-    private GoogleMap map;
-    private CameraPosition cameraPosition;
-    private FloatingActionButton btnMapReturn;
+    private GoogleMap mMap;
+    private CameraPosition mCameraPosition;
+    private FloatingActionButton mBtnMapReturn;
 
 
     // The entry point to the Fused Location Provider.
@@ -75,7 +75,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
             lastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
-            cameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
+            mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
 
         // Retrieve the content view that renders the map.
@@ -89,9 +89,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        btnMapReturn = (FloatingActionButton) findViewById(R.id.btnMapReturn);
+        mBtnMapReturn = (FloatingActionButton) findViewById(R.id.btnMapReturn);
 
-        btnMapReturn.setOnClickListener(new View.OnClickListener() {
+        mBtnMapReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MapsActivity.this, MainActivity.class);
@@ -103,8 +103,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        if (map != null) {
-            outState.putParcelable(KEY_CAMERA_POSITION, map.getCameraPosition());
+        if (mMap != null) {
+            outState.putParcelable(KEY_CAMERA_POSITION, mMap.getCameraPosition());
             outState.putParcelable(KEY_LOCATION, lastKnownLocation);
         }
         super.onSaveInstanceState(outState);
@@ -113,7 +113,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        this.map = googleMap;
+        this.mMap = googleMap;
 
 
         // Prompt the user for permission.
@@ -169,16 +169,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             lastKnownLocation = task.getResult();
                             if (lastKnownLocation != null) {
                                 saveCurrentUserLocation(lastKnownLocation);
-                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(lastKnownLocation.getLatitude(),
                                                 lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                             }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
-                            map.moveCamera(CameraUpdateFactory
+                            mMap.moveCamera(CameraUpdateFactory
                                     .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
-                            map.getUiSettings().setMyLocationButtonEnabled(false);
+                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
                         }
                     }
                 });
@@ -214,16 +214,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @SuppressLint("MissingPermission")
     private void updateLocationUI() {
-        if (map == null) {
+        if (mMap == null) {
             return;
         }
         try {
             if (locationPermissionGranted) {
-                map.setMyLocationEnabled(true);
-                map.getUiSettings().setMyLocationButtonEnabled(true);
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
             } else {
-                map.setMyLocationEnabled(false);
-                map.getUiSettings().setMyLocationButtonEnabled(false);
+                mMap.setMyLocationEnabled(false);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
                 lastKnownLocation = null;
                 getLocationPermission();
             }
@@ -274,7 +274,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Log.i(TAG, "size" + posts.size());
                     for(int i = 0; i < posts.size(); i++) {
                         LatLng postLocation = new LatLng(posts.get(i).getParseGeoPoint("location").getLatitude(), posts.get(i).getParseGeoPoint("location").getLongitude());
-                        map.addMarker(new MarkerOptions().position(postLocation).title(posts.get(i).getString("title")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        mMap.addMarker(new MarkerOptions().position(postLocation).title(posts.get(i).getString("title")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                     }
                 } else {
                     // handle the error
@@ -300,11 +300,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Post post = (Post) nearPosts.get(i);
                         if (post.getAccepted() == null) {
                             LatLng postLocation = new LatLng(nearPosts.get(i).getParseGeoPoint("location").getLatitude(), nearPosts.get(i).getParseGeoPoint("location").getLongitude());
-                            map.addMarker(new MarkerOptions().position(postLocation).title(nearPosts.get(i).getString("title")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                            mMap.addMarker(new MarkerOptions().position(postLocation).title(nearPosts.get(i).getString("title")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                         }
                     }
                     // zoom the map to the current location
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(lastKnownLocation.getLatitude(),
                                     lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                 } else {

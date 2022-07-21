@@ -43,11 +43,11 @@ import java.util.List;
 public class ComposeFragment extends Fragment {
     public static final String TAG = "ComposeFragment";
 
-    private Button btnSubmit;
-    private EditText composePay;
-    private ChipGroup chipGroup;
-    private EditText composeTitle;
-    private EditText composeDescription;
+    private Button mBtnSubmit;
+    private EditText mComposePay;
+    private ChipGroup mChipGroup;
+    private EditText mComposeTitle;
+    private EditText mComposeDescription;
 
     public ComposeFragment() {
         // Required empty public constructor
@@ -64,19 +64,19 @@ public class ComposeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        composeTitle = view.findViewById(R.id.composeTitle);
-        composePay = view.findViewById(R.id.composePay);
-        composeDescription = view.findViewById(R.id.composeDescription);
-        btnSubmit = view.findViewById(R.id.btnSubmit);
-        chipGroup = view.findViewById(R.id.chipGroupCompose);
+        mComposeTitle = view.findViewById(R.id.composeTitle);
+        mComposePay = view.findViewById(R.id.composePay);
+        mComposeDescription = view.findViewById(R.id.composeDescription);
+        mBtnSubmit = view.findViewById(R.id.btnSubmit);
+        mChipGroup = view.findViewById(R.id.chipGroupCompose);
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
+        mBtnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String title = composeTitle.getText().toString();
+                String title = mComposeTitle.getText().toString();
                 int pay = -1;
-                pay = Integer.parseInt(composePay.getText().toString());
-                String description = composeDescription.getText().toString();
+                pay = Integer.parseInt(mComposePay.getText().toString());
+                String description = mComposeDescription.getText().toString();
                 if (title.isEmpty()) {
                     Toast.makeText(getContext(), "Title cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
@@ -90,7 +90,7 @@ public class ComposeFragment extends Fragment {
                     return;
                 }
 
-                List<Integer> chipsChecked = chipGroup.getCheckedChipIds();
+                List<Integer> chipsChecked = mChipGroup.getCheckedChipIds();
 
                 if (chipsChecked.isEmpty()) {
                     Toast.makeText(getContext(), "Choose a tag", Toast.LENGTH_SHORT).show();
@@ -113,7 +113,7 @@ public class ComposeFragment extends Fragment {
 
         // set chips selected
         for (Integer id : chipsChecked) {
-            Chip chip = chipGroup.findViewById(id);
+            Chip chip = mChipGroup.findViewById(id);
             switch (chip.getText().toString()) {
                 case "18+":
                     post.setAgeRestriction(true);
@@ -136,9 +136,9 @@ public class ComposeFragment extends Fragment {
                     return;
                 }
                 Log.i(TAG, "Post was successful!");
-                composeTitle.setText("");
-                composePay.setText("");
-                composeDescription.setText("");
+                mComposeTitle.setText("");
+                mComposePay.setText("");
+                mComposeDescription.setText("");
 
                 Intent i = new Intent(getContext(), CheckAnimation.class);
                 startActivity(i);

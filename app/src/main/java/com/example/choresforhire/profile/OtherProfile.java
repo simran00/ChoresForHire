@@ -32,11 +32,11 @@ public class OtherProfile extends AppCompatActivity implements SelectListener {
 
     public static final String TAG = "OtherProfile";
 
-    private ParseUser mOtherUser;
     private ImageButton mCancel;
-    private RecyclerView mTheirChoresView;
+    private ParseUser mOtherUser;
     private List<Post> mAllPosts;
     private PostsAdapter mChoresAdapter;
+    private RecyclerView mTheirChoresView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

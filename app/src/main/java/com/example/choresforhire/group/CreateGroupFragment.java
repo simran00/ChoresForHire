@@ -24,9 +24,9 @@ import com.parse.SaveCallback;
 public class CreateGroupFragment extends Fragment {
     public static final String TAG = "CreateGroupFragment";
 
-    private Button btnCreate;
-    private EditText groupTitle;
-    private EditText groupDescription;
+    private Button mBtnCreate;
+    private EditText mGroupTitle;
+    private EditText mGroupDescription;
 
     public CreateGroupFragment() {
         // Required empty public constructor
@@ -43,15 +43,15 @@ public class CreateGroupFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        groupTitle = view.findViewById(R.id.composeTitleGroup);
-        groupDescription = view.findViewById(R.id.composeDescriptionGroup);
-        btnCreate = view.findViewById(R.id.btnCreateGroup);
+        mGroupTitle = view.findViewById(R.id.composeTitleGroup);
+        mGroupDescription = view.findViewById(R.id.composeDescriptionGroup);
+        mBtnCreate = view.findViewById(R.id.btnCreateGroup);
 
-        btnCreate.setOnClickListener(new View.OnClickListener() {
+        mBtnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String title = groupTitle.getText().toString();
-                String description = groupDescription.getText().toString();
+                String title = mGroupTitle.getText().toString();
+                String description = mGroupDescription.getText().toString();
 
                 if (title.isEmpty()) {
                     Toast.makeText(getContext(), "Title cannot be empty", Toast.LENGTH_SHORT).show();
@@ -79,8 +79,8 @@ public class CreateGroupFragment extends Fragment {
                     Toast.makeText(getContext(), "Error while creating group!", Toast.LENGTH_SHORT).show();
                 }
                 Log.i(TAG, "Group was successfully created!");
-                groupTitle.setText("");
-                groupDescription.setText("");
+                mGroupTitle.setText("");
+                mGroupDescription.setText("");
 
                 Intent i = new Intent(getContext(), CheckAnimation.class);
                 startActivity(i);

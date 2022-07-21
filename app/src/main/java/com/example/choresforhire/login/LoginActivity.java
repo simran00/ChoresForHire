@@ -21,10 +21,10 @@ import com.parse.ParseUser;
 public class LoginActivity extends AppCompatActivity {
     public static final String TAG = "LoginActivity";
 
-    private Button btnLogin;
-    private Button btnSignup;
-    private TextInputEditText etUsername;
-    private TextInputEditText etPassword;
+    private Button mBtnLogin;
+    private Button mBtnSignup;
+    private TextInputEditText mUsername;
+    private TextInputEditText mPassword;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,22 +36,22 @@ public class LoginActivity extends AppCompatActivity {
             goMainActivity();
         }
 
-        etUsername = findViewById(R.id.etUsername);
-        etPassword = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnLogin);
-        btnSignup = findViewById(R.id.btnSignup);
+        mUsername = findViewById(R.id.etUsername);
+        mPassword = findViewById(R.id.etPassword);
+        mBtnLogin = findViewById(R.id.btnLogin);
+        mBtnSignup = findViewById(R.id.btnSignup);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick login button");
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
+                String username = mUsername.getText().toString();
+                String password = mPassword.getText().toString();
                 loginUser(username, password);
             }
         });
 
-        btnSignup.setOnClickListener(new View.OnClickListener() {
+        mBtnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick signup button");

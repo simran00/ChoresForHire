@@ -24,102 +24,102 @@ import java.util.List;
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
     public static final String TAG = "PostsAdapter";
 
-    private Context context;
-    private List<Post> posts;
-    private SelectListener selectListener;
+    private Context mContext;
+    private List<Post> mPosts;
+    private SelectListener mSelectListener;
 
     public PostsAdapter(Context context, List<Post> posts, SelectListener selectListener) {
-        this.context = context;
-        this.posts = posts;
-        this.selectListener = selectListener;
+        this.mContext = context;
+        this.mPosts = posts;
+        this.mSelectListener = selectListener;
     }
 
     // For each row, inflate the layout
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_post, parent, false);
         return new ViewHolder(view);
     }
 
     // Bind values based on the position of the element
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Post post = posts.get(position);
+        Post post = mPosts.get(position);
         holder.bind(post);
     }
 
     @Override
     public int getItemCount() {
-        return posts.size();
+        return mPosts.size();
     }
 
     // Define a viewholder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvPay;
-        private TextView tvTitle;
-        private TextView tvPoster;
-        private TextView tvDistance;
-        private TextView tvDescription;
-        private ChipGroup chipGroupHome;
-        private ConstraintLayout itemPost;
+        private TextView mPay;
+        private TextView mTitle;
+        private TextView mPoster;
+        private TextView mDistance;
+        private TextView mDescription;
+        private ChipGroup mChipGroupHome;
+        private ConstraintLayout mItemPost;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvPay = itemView.findViewById(R.id.tvPay);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            tvDistance = itemView.findViewById(R.id.tvDistance);
-            tvPoster = itemView.findViewById(R.id.tvPoster);
-            itemPost = itemView.findViewById(R.id.itemPost);
-            chipGroupHome = itemView.findViewById(R.id.chipGroupHome);
+            mTitle = itemView.findViewById(R.id.tvTitle);
+            mPay = itemView.findViewById(R.id.tvPay);
+            mDescription = itemView.findViewById(R.id.tvDescription);
+            mDistance = itemView.findViewById(R.id.tvDistance);
+            mPoster = itemView.findViewById(R.id.tvPoster);
+            mItemPost = itemView.findViewById(R.id.itemPost);
+            mChipGroupHome = itemView.findViewById(R.id.chipGroupHome);
         }
 
         public void bind(Post post) {
-            tvTitle.setText(post.getTitle());
-            tvPay.setText("$" + post.getPay());
-            tvDescription.setText(post.getDescription());
+            mTitle.setText(post.getTitle());
+            mPay.setText("$" + post.getPay());
+            mDescription.setText(post.getDescription());
 
             ParseGeoPoint currUserLoc = (ParseGeoPoint) ParseUser.getCurrentUser().get("location");
             ParseGeoPoint postLocation = post.getLocation();
 
             if (currUserLoc.equals(new ParseGeoPoint(0,0))) {
-                tvDistance.setText("-- mi");
+                mDistance.setText("-- mi");
             } else {
                 double distance = currUserLoc.distanceInMilesTo(postLocation);
-                tvDistance.setText(String.valueOf(Math.round (distance * 100.0) / 100.0) + " mi");
+                mDistance.setText(String.valueOf(Math.round (distance * 100.0) / 100.0) + " mi");
             }
 
-            tvPoster.setText(post.getUser().getUsername());
+            mPoster.setText(post.getUser().getUsername());
 
 
-            itemPost.setOnClickListener(new View.OnClickListener() {
+            mItemPost.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (selectListener != null) {
-                        selectListener.onItemClicked(post);
+                    if (mSelectListener != null) {
+                        mSelectListener.onItemClicked(post);
                     }
                 }
             });
 
-            chipGroupHome.removeAllViews();
+            mChipGroupHome.removeAllViews();
             if (post.isAgeRestricted()) {
-                Chip ageRestricted = new Chip(chipGroupHome.getContext());
+                Chip ageRestricted = new Chip(mChipGroupHome.getContext());
                 ageRestricted.setText("18+");
-                chipGroupHome.addView(ageRestricted);
+                mChipGroupHome.addView(ageRestricted);
             }
 
             if (post.isOneTime()) {
-                Chip oneTime = new Chip(chipGroupHome.getContext());
+                Chip oneTime = new Chip(mChipGroupHome.getContext());
                 oneTime.setText("One-time");
-                chipGroupHome.addView(oneTime);
+                mChipGroupHome.addView(oneTime);
             }
 
             if (post.isRecurring()) {
-                Chip recurring = new Chip(chipGroupHome.getContext());
+                Chip recurring = new Chip(mChipGroupHome.getContext());
                 recurring.setText("Recurring");
-                chipGroupHome.addView(recurring);
+                mChipGroupHome.addView(recurring);
             }
 
         }
@@ -128,18 +128,18 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     // Clean all elements of the recycler
     public void clear() {
-        posts.clear();
+        mPosts.clear();
         notifyDataSetChanged();
     }
 
     // Add a list of items -- change to type used
     public void addAll(List<Post> list) {
-        posts.addAll(list);
+        mPosts.addAll(list);
         notifyDataSetChanged();
     }
 
     public void add(Post post) {
-        posts.add(post);
+        mPosts.add(post);
         notifyDataSetChanged();
     }
 }

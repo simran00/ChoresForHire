@@ -28,17 +28,17 @@ public class MyChoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int SHOW_MENU = 1;
     private final int HIDE_MENU = 2;
 
-    private Context context;
-    private List<Post> posts;
+    private Context mContext;
+    private List<Post> mPosts;
 
     public MyChoresAdapter(Context context, List<Post> posts) {
-        this.context = context;
-        this.posts = posts;
+        this.mContext = context;
+        this.mPosts = posts;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (posts.get(position).isShowMenu()) {
+        if (mPosts.get(position).isShowMenu()) {
             return SHOW_MENU;
         } else {
             return HIDE_MENU;
@@ -54,20 +54,20 @@ public class MyChoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_chores_swipe_menu, parent, false);
             return new MenuViewHolder(view);
         } else {
-            view = LayoutInflater.from(context).inflate(R.layout.my_chores_item, parent, false);
+            view = LayoutInflater.from(mContext).inflate(R.layout.my_chores_item, parent, false);
             return new MyChoresViewHolder(view);
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Post post = posts.get(holder.getAbsoluteAdapterPosition());
+        Post post = mPosts.get(holder.getAbsoluteAdapterPosition());
         if (holder instanceof MyChoresViewHolder) {
             ((MyChoresViewHolder)holder).mTitle.setText(post.getTitle());
             ((MyChoresViewHolder) holder).mPay.setText("$" + String.valueOf(post.getPay()));
             ((MyChoresViewHolder) holder).mDescription.setText(post.getDescription());
 
-            ((MyChoresViewHolder)holder).container.setOnLongClickListener(new View.OnLongClickListener() {
+            ((MyChoresViewHolder)holder).mContainer.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     showMenu(holder.getAbsoluteAdapterPosition());
@@ -86,7 +86,7 @@ public class MyChoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     bundle.putParcelable("post", post);
                     bottomSheet.setArguments(bundle);
 
-                    bottomSheet.show(((AppCompatActivity) context).getSupportFragmentManager(),
+                    bottomSheet.show(((AppCompatActivity) mContext).getSupportFragmentManager(),
                             "ModalBottomSheet");
                 }
             });
@@ -96,21 +96,21 @@ public class MyChoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return posts.size();
+        return mPosts.size();
     }
 
     public void showMenu(int position) {
-        for(int i=0; i < posts.size(); i++){
-            posts.get(i).setShowMenu(false);
+        for(int i = 0; i < mPosts.size(); i++){
+            mPosts.get(i).setShowMenu(false);
         }
-        posts.get(position).setShowMenu(true);
+        mPosts.get(position).setShowMenu(true);
         notifyDataSetChanged();
     }
 
 
     public boolean isMenuShown() {
-        for(int i=0; i<posts.size(); i++){
-            if(posts.get(i).isShowMenu()){
+        for(int i = 0; i < mPosts.size(); i++){
+            if(mPosts.get(i).isShowMenu()){
                 return true;
             }
         }
@@ -118,8 +118,8 @@ public class MyChoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void closeMenu() {
-        for(int i = 0; i < posts.size(); i++){
-            posts.get(i).setShowMenu(false);
+        for(int i = 0; i < mPosts.size(); i++){
+            mPosts.get(i).setShowMenu(false);
         }
         notifyDataSetChanged();
     }
@@ -129,7 +129,7 @@ public class MyChoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private TextView mTitle;
         private TextView mPay;
         private TextView mDescription;
-        private ConstraintLayout container;
+        private ConstraintLayout mContainer;
 
 
         public MyChoresViewHolder(@NonNull View itemView) {
@@ -137,7 +137,7 @@ public class MyChoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mTitle = itemView.findViewById(R.id.myChoreTitle);
             mPay = itemView.findViewById(R.id.myChorePay);
             mDescription = itemView.findViewById(R.id.myChoreDescription);
-            container = itemView.findViewById(R.id.container);
+            mContainer = itemView.findViewById(R.id.container);
         }
     }
 

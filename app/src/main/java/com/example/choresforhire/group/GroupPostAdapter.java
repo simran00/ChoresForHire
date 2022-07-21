@@ -15,30 +15,30 @@ import com.parse.ParseUser;
 import java.util.List;
 
 public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.PostViewHolder>{
-    private Context context;
-    private List<GroupPost> posts;
+    private Context mContext;
+    private List<GroupPost> mPosts;
 
     public GroupPostAdapter(Context context, List<GroupPost> posts) {
-        this.context = context;
-        this.posts = posts;
+        this.mContext = context;
+        this.mPosts = posts;
     }
 
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.group_post_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.group_post_item, parent, false);
         return new PostViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-        GroupPost post = posts.get(position);
+        GroupPost post = mPosts.get(position);
         holder.bind(post);
     }
 
     @Override
     public int getItemCount() {
-        return posts.size();
+        return mPosts.size();
     }
 
     public class PostViewHolder extends RecyclerView.ViewHolder {

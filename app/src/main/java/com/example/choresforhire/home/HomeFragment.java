@@ -46,14 +46,14 @@ public class HomeFragment extends Fragment implements SelectListener {
     public static final String TAG = "HomeFragment";
     private final String MY_HOME_LABEL = "myHome";
 
-    private List<Post> allPosts;
     private SearchView svSearch;
-    private PostsAdapter adapter;
-    private RecyclerView rvPosts;
     private RadioGroup mSorting;
-    private AutoCompleteTextView mTagOptions;
+    private List<Post> mAllPosts;
+    private RecyclerView rvPosts;
+    private PostsAdapter mPostsAdapter;
     private TextInputLayout mTagMenu;
     private FloatingActionButton btnMap;
+    private AutoCompleteTextView mTagOptions;
     private SwipeRefreshLayout swipeContainer;
 
     private boolean statusRadioBtn;
@@ -143,13 +143,13 @@ public class HomeFragment extends Fragment implements SelectListener {
                 android.R.color.holo_red_light);
 
         // initialize the array that will hold posts and create a PostsAdapter
-        allPosts = new ArrayList<>();
-        adapter = new PostsAdapter(getContext(), allPosts, this);
+        mAllPosts = new ArrayList<>();
+        mPostsAdapter = new PostsAdapter(getContext(), mAllPosts, this);
 
         // set the layout manager on the recycler view
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         // set the adapter on the recycler view
-        rvPosts.setAdapter(adapter);
+        rvPosts.setAdapter(mPostsAdapter);
         // query posts
         queryPostsByTime(statusRadioBtn, "");
 
@@ -179,16 +179,16 @@ public class HomeFragment extends Fragment implements SelectListener {
                             Log.e(TAG, "Issue with getting posts", e);
                             return;
                         }
-                        allPosts.clear();
+                        mAllPosts.clear();
 
                         // check if post has already been accepted
                         for (int i = 0; i < posts.size(); i++) {
                             if (posts.get(i).getAccepted() == null) {
-                                allPosts.add(posts.get(i));
+                                mAllPosts.add(posts.get(i));
                             }
                         }
 
-                        adapter.notifyDataSetChanged();
+                        mPostsAdapter.notifyDataSetChanged();
                     }
                 });
                 return false;
@@ -246,13 +246,13 @@ public class HomeFragment extends Fragment implements SelectListener {
             ParseException error = (ParseException) task.getError();
             if (error == null){
                 List<Post> posts = task.getResult();
-                allPosts.clear();
+                mAllPosts.clear();
                 for (int i = 0; i < posts.size(); i++) {
                     if (posts.get(i).getAccepted() == null) {
-                        allPosts.add(posts.get(i));
+                        mAllPosts.add(posts.get(i));
                     }
                 }
-                adapter.notifyDataSetChanged();
+                mPostsAdapter.notifyDataSetChanged();
             }
             // Now query the network:
             return query.fromNetwork().findInBackground();
@@ -271,14 +271,14 @@ public class HomeFragment extends Fragment implements SelectListener {
 
                         // Add the latest results for this query to the cache.
                         Post.pinAllInBackground(MY_HOME_LABEL, posts);
-                        allPosts.clear();
+                        mAllPosts.clear();
                         // check if post has already been accepted
                         for (int i = 0; i < posts.size(); i++) {
                             if (posts.get(i).getAccepted() == null) {
-                                allPosts.add(posts.get(i));
+                                mAllPosts.add(posts.get(i));
                             }
                         }
-                        adapter.notifyDataSetChanged();
+                        mPostsAdapter.notifyDataSetChanged();
                     }
                 });
             }

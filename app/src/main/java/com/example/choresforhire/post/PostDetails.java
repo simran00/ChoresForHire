@@ -27,9 +27,9 @@ import org.json.JSONObject;
 public class PostDetails extends AppCompatActivity {
     public static final String TAG = "PostsDetails";
 
-    private Post post;
-    private Button btnAccept;
-    private Button btnCancel;
+    private Post mPost;
+    private Button mBtnAccept;
+    private Button mBtnCancel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,18 +41,18 @@ public class PostDetails extends AppCompatActivity {
         TextView author;
         TextView detailDescription;
         CardView mOtherProfile;
-        btnAccept = findViewById(R.id.btnAccept);
-        btnCancel = findViewById(R.id.btnCancel);
+        mBtnAccept = findViewById(R.id.btnAccept);
+        mBtnCancel = findViewById(R.id.btnCancel);
 
-        post = null;
+        mPost = null;
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
-                post = (Post) extras.get("post");
+                mPost = (Post) extras.get("post");
             }
         } else {
-            post = (Post) savedInstanceState.getSerializable("post");
+            mPost = (Post) savedInstanceState.getSerializable("post");
         }
 
         detailTitle = findViewById(R.id.detailTitle);
@@ -61,17 +61,17 @@ public class PostDetails extends AppCompatActivity {
         mOtherProfile = findViewById(R.id.otherProfile);
         author = findViewById(R.id.tvPostDetAut);
 
-        detailTitle.setText(post.getTitle());
-        detailPay.setText("$" + post.getPay());
-        detailDescription.setText(post.getDescription());
-        author.setText(post.getUser().getUsername());
+        detailTitle.setText(mPost.getTitle());
+        detailPay.setText("$" + mPost.getPay());
+        detailDescription.setText(mPost.getDescription());
+        author.setText(mPost.getUser().getUsername());
 
-        btnAccept.setOnClickListener(new View.OnClickListener() {
+        mBtnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ParseUser currUser = ParseUser.getCurrentUser();
-                post.setAccepted(currUser);
-                post.saveInBackground(new SaveCallback() {
+                mPost.setAccepted(currUser);
+                mPost.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
                         Toast.makeText(PostDetails.this, "Success!", Toast.LENGTH_SHORT).show();
@@ -84,7 +84,7 @@ public class PostDetails extends AppCompatActivity {
             }
         });
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        mBtnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PostDetails.this, MainActivity.class);
@@ -96,7 +96,7 @@ public class PostDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PostDetails.this, OtherProfile.class);
-                i.putExtra("user", post.getUser());
+                i.putExtra("user", mPost.getUser());
                 startActivity(i);
             }
         });
@@ -106,8 +106,8 @@ public class PostDetails extends AppCompatActivity {
         JSONObject data = new JSONObject();
         // Put data in the JSON object
         try {
-            data.put("alert", post.getAccepted().getUsername() + " accepted your chore!");
-            data.put("title", "Accepted: " + post.getTitle());
+            data.put("alert", mPost.getAccepted().getUsername() + " accepted your chore!");
+            data.put("title", "Accepted: " + mPost.getTitle());
         } catch ( JSONException error) {
             // should not happen
             throw new IllegalArgumentException("unexpected parsing error", error);
@@ -117,7 +117,7 @@ public class PostDetails extends AppCompatActivity {
         ParsePush push = new ParsePush();
         // push to post author
         ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
-        query.whereEqualTo("user", post.getUser());
+        query.whereEqualTo("user", mPost.getUser());
         push.setQuery(query);
         push.setData(data);
         push.sendInBackground();

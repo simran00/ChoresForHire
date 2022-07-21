@@ -34,10 +34,10 @@ public class GroupFragment extends Fragment {
     private Group currGroup;
     private Button mBtnPost;
     private Button mBtnLeave;
+    private RecyclerView mPostsView;
     private EditText mComposeMessage;
     private List<GroupPost> mAllPosts;
     private GroupPostAdapter mGroupPostAdapter;
-    private RecyclerView mPostsView;
 
     public GroupFragment() {
         // Required empty public constructor

@@ -31,72 +31,72 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class ChoresTodoAdapter extends RecyclerView.Adapter<ChoresTodoAdapter.ToDoViewHolder>{
-    private Context context;
-    private List<Post> posts;
+    private Context mContext;
+    private List<Post> mPosts;
 
     public ChoresTodoAdapter(Context context, List<Post> posts) {
-        this.context = context;
-        this.posts = posts;
+        this.mContext = context;
+        this.mPosts = posts;
     }
 
     @NonNull
     @Override
     public ChoresTodoAdapter.ToDoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.chores_todo_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.chores_todo_item, parent, false);
         return new ToDoViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ChoresTodoAdapter.ToDoViewHolder holder, int position) {
-        Post post = posts.get(position);
+        Post post = mPosts.get(position);
         holder.bind(post);
     }
 
     @Override
     public int getItemCount() {
-        return posts.size();
+        return mPosts.size();
     }
 
     public class ToDoViewHolder extends RecyclerView.ViewHolder {
-        private TextView todoPay;
-        private TextView todoTitle;
-        private TextView todoPoster;
-        private TextView todoDistance;
-        private CheckBox todoCheckBox;
-        private TextView todoDescription;
+        private TextView mTodoPay;
+        private TextView mTodoTitle;
+        private TextView mTodoPoster;
+        private TextView mTodoDistance;
+        private CheckBox mTodoCheckBox;
+        private TextView mTodoDescription;
 
         public ToDoViewHolder(@NonNull View itemView) {
             super(itemView);
-            todoPay = itemView.findViewById(R.id.todoPay);
-            todoTitle = itemView.findViewById(R.id.todoTitle);
-            todoPoster = itemView.findViewById(R.id.todoPoster);
-            todoDistance = itemView.findViewById(R.id.todoDistance);
-            todoCheckBox = itemView.findViewById(R.id.todoCheckBox);
-            todoDescription = itemView.findViewById(R.id.todoDescription);
+            mTodoPay = itemView.findViewById(R.id.todoPay);
+            mTodoTitle = itemView.findViewById(R.id.todoTitle);
+            mTodoPoster = itemView.findViewById(R.id.todoPoster);
+            mTodoDistance = itemView.findViewById(R.id.todoDistance);
+            mTodoCheckBox = itemView.findViewById(R.id.todoCheckBox);
+            mTodoDescription = itemView.findViewById(R.id.todoDescription);
         }
 
         public void bind(Post post) {
-            todoTitle.setText(post.getTitle());
-            todoPay.setText("$" + post.getPay());
-            todoDescription.setText(post.getDescription());
+            mTodoTitle.setText(post.getTitle());
+            mTodoPay.setText("$" + post.getPay());
+            mTodoDescription.setText(post.getDescription());
 
             ParseGeoPoint currUserLoc = (ParseGeoPoint) ParseUser.getCurrentUser().get("location");
             ParseGeoPoint postLocation = post.getLocation();
 
             if (currUserLoc.equals(new ParseGeoPoint(0,0))) {
-                todoDistance.setText("-- km");
+                mTodoDistance.setText("-- km");
             } else {
                 double distance = currUserLoc.distanceInKilometersTo(postLocation);
-                todoDistance.setText(String.valueOf(Math.round (distance * 100.0) / 100.0) + " km");
+                mTodoDistance.setText(String.valueOf(Math.round (distance * 100.0) / 100.0) + " km");
             }
 
-            todoPoster.setText(post.getUser().getUsername());
+            mTodoPoster.setText(post.getUser().getUsername());
 
             if (post.isCompleted()) {
-                todoCheckBox.setChecked(true);
+                mTodoCheckBox.setChecked(true);
             }
 
-            todoCheckBox.setOnClickListener(new View.OnClickListener() {
+            mTodoCheckBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (((CheckBox) v).isChecked()) {
@@ -144,17 +144,17 @@ public class ChoresTodoAdapter extends RecyclerView.Adapter<ChoresTodoAdapter.To
     }
 
     public void clear() {
-        posts.clear();
+        mPosts.clear();
         notifyDataSetChanged();
     }
 
     public void add(Post post) {
-        posts.add(post);
+        mPosts.add(post);
         notifyDataSetChanged();
     }
 
     public void addAll(List<Post> list) {
-        posts.addAll(list);
+        mPosts.addAll(list);
         notifyDataSetChanged();
     }
 }

@@ -39,9 +39,9 @@ public class ChatActivity extends AppCompatActivity {
 
     boolean mFirstLoad;
     private EditText mMessage;
-    private ImageButton ibSend;
-    private ParseUser chatUser;
-    private RecyclerView rvChat;
+    private ImageButton mIbSend;
+    private ParseUser mChatUser;
+    private RecyclerView mRvChat;
     private ChatAdapter mChatAdapter;
     private ArrayList<Message> mMessages;
 
@@ -54,10 +54,10 @@ public class ChatActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
-                chatUser = (ParseUser) extras.get("user");
+                mChatUser = (ParseUser) extras.get("user");
             }
         } else {
-            chatUser = (ParseUser) savedInstanceState.getSerializable("user");
+            mChatUser = (ParseUser) savedInstanceState.getSerializable("user");
         }
 
         if (ParseUser.getCurrentUser() != null) { // start with existing user
@@ -92,7 +92,7 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     mChatAdapter.notifyDataSetChanged();
-                    rvChat.scrollToPosition(0);
+                    mRvChat.scrollToPosition(0);
                 }
             });
         });
@@ -110,33 +110,31 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setupMessagePosting() {
         mMessage = findViewById(R.id.etMessage);
-        ibSend =  findViewById(R.id.ibSend);
-        rvChat = findViewById(R.id.rvChat);
+        mIbSend =  findViewById(R.id.ibSend);
+        mRvChat = findViewById(R.id.rvChat);
         mMessages = new ArrayList<>();
         mFirstLoad = true;
         final String userId = ParseUser.getCurrentUser().getObjectId();
         mChatAdapter = new ChatAdapter(ChatActivity.this, userId, mMessages);
-        rvChat.setAdapter(mChatAdapter);
+        mRvChat.setAdapter(mChatAdapter);
 
         // associate the LayoutManager with the RecylcerView
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
         linearLayoutManager.setReverseLayout(true);
-        rvChat.setLayoutManager(linearLayoutManager);
+        mRvChat.setLayoutManager(linearLayoutManager);
 
-        ibSend.setOnClickListener(new View.OnClickListener() {
+        mIbSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String data = mMessage.getText().toString();
                 Message message = new Message();
                 message.setUser(ParseUser.getCurrentUser());
-                message.setReceiver(chatUser);
+                message.setReceiver(mChatUser);
                 message.setBody(data);
 
                 message.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        Toast.makeText(ChatActivity.this, "Successfully created message on Parse",
-                                Toast.LENGTH_SHORT).show();
                         refreshMessages();
                     }
                 });
@@ -150,12 +148,12 @@ public class ChatActivity extends AppCompatActivity {
         ParseQuery<Message> query2 = ParseQuery.getQuery(Message.class);
 
         // query where user is chatUser and receiver is current user
-        query1.whereEqualTo("user", chatUser);
+        query1.whereEqualTo("user", mChatUser);
         query1.whereEqualTo("receiver", ParseUser.getCurrentUser());
 
         // OR query where user is current user and receiver is chatUser
         query2.whereEqualTo("user", ParseUser.getCurrentUser());
-        query2.whereEqualTo("receiver", chatUser);
+        query2.whereEqualTo("receiver", mChatUser);
 
         List<ParseQuery<Message>> queries = Arrays.asList(query1, query2);
         ParseQuery<Message> combinedQuery = ParseQuery.or(queries);
@@ -176,7 +174,7 @@ public class ChatActivity extends AppCompatActivity {
                     mChatAdapter.notifyDataSetChanged(); // update adapter
                     // Scroll to the bottom of the list on initial load
                     if (mFirstLoad) {
-                        rvChat.scrollToPosition(0);
+                        mRvChat.scrollToPosition(0);
                         mFirstLoad = false;
                     }
                 } else {

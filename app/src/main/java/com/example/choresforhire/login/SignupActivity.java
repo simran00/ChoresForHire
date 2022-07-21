@@ -19,36 +19,36 @@ import com.parse.SignUpCallback;
 public class SignupActivity extends AppCompatActivity {
     public static final String TAG = "SignupActivity";
 
-    private Button btnSignup;
-    private ParseUser currUser;
-    private TextInputEditText etEmail;
-    private TextInputEditText etPassword;
-    private TextInputEditText etUsername;
+    private Button mBtnSignup;
+    private ParseUser mCurrUser;
+    private TextInputEditText mEmail;
+    private TextInputEditText mPassword;
+    private TextInputEditText mUsername;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        etEmail = findViewById(R.id.etEmail);
-        etUsername = findViewById(R.id.etUsername);
-        etPassword = findViewById(R.id.etPassword);
-        btnSignup = findViewById(R.id.btnSignup);
+        mEmail = findViewById(R.id.etEmail);
+        mUsername = findViewById(R.id.etUsername);
+        mPassword = findViewById(R.id.etPassword);
+        mBtnSignup = findViewById(R.id.btnSignup);
 
-        btnSignup.setOnClickListener(new View.OnClickListener() {
+        mBtnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currUser = new ParseUser();
+                mCurrUser = new ParseUser();
 
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
-                String email = etEmail.getText().toString();
+                String username = mUsername.getText().toString();
+                String password = mPassword.getText().toString();
+                String email = mEmail.getText().toString();
 
-                currUser.setEmail(email);
-                currUser.setUsername(username);
-                currUser.setPassword(password);
+                mCurrUser.setEmail(email);
+                mCurrUser.setUsername(username);
+                mCurrUser.setPassword(password);
 
-                currUser.signUpInBackground(new SignUpCallback() {
+                mCurrUser.signUpInBackground(new SignUpCallback() {
                     @Override
                     public void done(ParseException e) {
                         if (e != null) {

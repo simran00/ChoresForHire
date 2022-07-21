@@ -26,8 +26,8 @@ public class ThreadAdapter extends RecyclerView.Adapter<ThreadAdapter.ViewHolder
     private SelectListenerChat selectListenerChat;
 
     public ThreadAdapter(Context context, List<ParseUser> users, SelectListenerChat selectListenerChat) {
-        this.context = context;
         this.users = users;
+        this.context = context;
         this.selectListenerChat = selectListenerChat;
     }
 

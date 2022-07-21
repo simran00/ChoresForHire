@@ -24,11 +24,11 @@ import com.parse.ParseUser;
 public class ProfileFragment extends Fragment {
     public static final String TAG = "HomeFragment";
 
-    private Button btnLogout;
-    private Button btnMyChores;
-    private Button btnTodoChores;
-    private TextView profileName;
-    private TextView profileEmail;
+    private Button mBtnLogout;
+    private Button mBtnMyChores;
+    private Button mBtnTodoChores;
+    private TextView mProfileName;
+    private TextView mProfileEmail;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -48,17 +48,17 @@ public class ProfileFragment extends Fragment {
 
         ParseUser currUser = ParseUser.getCurrentUser();
 
-        profileName = view.findViewById(R.id.profileName);
-        profileEmail = view.findViewById(R.id.profileEmail);
+        mProfileName = view.findViewById(R.id.profileName);
+        mProfileEmail = view.findViewById(R.id.profileEmail);
 
-        profileName.setText(currUser.getUsername());
-        profileEmail.setText(currUser.getEmail());
+        mProfileName.setText(currUser.getUsername());
+        mProfileEmail.setText(currUser.getEmail());
 
-        btnLogout = view.findViewById(R.id.btnLogout);
-        btnMyChores = view.findViewById(R.id.btnMyChores);
-        btnTodoChores = view.findViewById(R.id.btnToDo);
+        mBtnLogout = view.findViewById(R.id.btnLogout);
+        mBtnMyChores = view.findViewById(R.id.btnMyChores);
+        mBtnTodoChores = view.findViewById(R.id.btnToDo);
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+        mBtnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ParseUser.logOut();
@@ -72,7 +72,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        btnMyChores.setOnClickListener(new View.OnClickListener() {
+        mBtnMyChores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new MyChoresFragment();
@@ -84,7 +84,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        btnTodoChores.setOnClickListener(new View.OnClickListener() {
+        mBtnTodoChores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new ToDoChoresFragment();

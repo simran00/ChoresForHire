@@ -38,24 +38,24 @@ import org.json.JSONException;
 import java.util.List;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
-    private Context context;
-    private List<Group> groups;
+    private Context mContext;
+    private List<Group> mGroups;
 
     public GroupAdapter(Context context, List<Group> groups) {
-        this.context = context;
-        this.groups = groups;
+        this.mContext = context;
+        this.mGroups = groups;
     }
 
     @NonNull
     @Override
     public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.group_card_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.group_card_item, parent, false);
         return new GroupViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
-        Group group = groups.get(position);
+        Group group = mGroups.get(position);
         try {
             holder.bind(group);
         } catch (JSONException e) {
@@ -65,7 +65,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
     @Override
     public int getItemCount() {
-        return groups.size();
+        return mGroups.size();
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
@@ -133,17 +133,17 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     }
 
     public void clear() {
-        groups.clear();
+        mGroups.clear();
         notifyDataSetChanged();
     }
 
     public void add(Group group) {
-        groups.add(group);
+        mGroups.add(group);
         notifyDataSetChanged();
     }
 
     public void addAll(List<Group> list) {
-        groups.addAll(list);
+        mGroups.addAll(list);
         notifyDataSetChanged();
     }
 }
