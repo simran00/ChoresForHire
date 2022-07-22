@@ -7,15 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.choresforhire.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
@@ -62,6 +65,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView mPoster;
         private TextView mDistance;
         private TextView mDescription;
+        private ImageView mProfilePic;
         private ChipGroup mChipGroupHome;
         private ConstraintLayout mItemPost;
 
@@ -72,6 +76,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             mDescription = itemView.findViewById(R.id.tvDescription);
             mDistance = itemView.findViewById(R.id.tvDistance);
             mPoster = itemView.findViewById(R.id.tvPoster);
+            mProfilePic = itemView.findViewById(R.id.ivProfilePicPost);
             mItemPost = itemView.findViewById(R.id.itemPost);
             mChipGroupHome = itemView.findViewById(R.id.chipGroupHome);
         }
@@ -92,6 +97,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             }
 
             mPoster.setText(post.getUser().getUsername());
+
+            ParseFile profilePic = (ParseFile) post.getUser().get("profilePic");
+
+            if (profilePic != null) {
+                Glide.with(mContext).load(profilePic.getUrl()).into(mProfilePic);
+            } else {
+                int drawableIdentifier = mContext.getResources().getIdentifier("blank_profile", "drawable", mContext.getPackageName());
+                Glide.with(mContext).load(drawableIdentifier).into(mProfilePic);
+            }
 
 
             mItemPost.setOnClickListener(new View.OnClickListener() {

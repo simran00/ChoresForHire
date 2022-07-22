@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,10 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.bumptech.glide.Glide;
 import com.example.choresforhire.home.MainActivity;
 import com.example.choresforhire.R;
 import com.example.choresforhire.profile.OtherProfile;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
@@ -36,11 +39,13 @@ public class PostDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.post_details);
 
-        TextView detailTitle;
-        TextView detailPay;
-        TextView author;
-        TextView detailDescription;
+        TextView mAuthor;
+        TextView mDetailPay;
+        TextView mDetailTitle;
+        ImageView mProfilePic;
         CardView mOtherProfile;
+        TextView mDetailDescription;
+
         mBtnAccept = findViewById(R.id.btnAccept);
         mBtnCancel = findViewById(R.id.btnCancel);
 
@@ -55,16 +60,26 @@ public class PostDetails extends AppCompatActivity {
             mPost = (Post) savedInstanceState.getSerializable("post");
         }
 
-        detailTitle = findViewById(R.id.detailTitle);
-        detailPay = findViewById(R.id.detailPay);
-        detailDescription = findViewById(R.id.detailDescription);
+        mDetailTitle = findViewById(R.id.detailTitle);
+        mDetailPay = findViewById(R.id.detailPay);
+        mDetailDescription = findViewById(R.id.detailDescription);
         mOtherProfile = findViewById(R.id.otherProfile);
-        author = findViewById(R.id.tvPostDetAut);
+        mAuthor = findViewById(R.id.tvPostDetAut);
+        mProfilePic = findViewById(R.id.ivProfilePicPost);
 
-        detailTitle.setText(mPost.getTitle());
-        detailPay.setText("$" + mPost.getPay());
-        detailDescription.setText(mPost.getDescription());
-        author.setText(mPost.getUser().getUsername());
+        mDetailTitle.setText(mPost.getTitle());
+        mDetailPay.setText("$" + mPost.getPay());
+        mDetailDescription.setText(mPost.getDescription());
+        mAuthor.setText(mPost.getUser().getUsername());
+
+        ParseFile profilePic = (ParseFile) mPost.getUser().get("profilePic");
+
+        if (profilePic != null) {
+            Glide.with(PostDetails.this).load(profilePic.getUrl()).into(mProfilePic);
+        } else {
+            int drawableIdentifier = (PostDetails.this).getResources().getIdentifier("blank_profile", "drawable", (PostDetails.this).getPackageName());
+            Glide.with(PostDetails.this).load(drawableIdentifier).into(mProfilePic);
+        }
 
         mBtnAccept.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -13,12 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.choresforhire.login.LoginActivity;
 import com.example.choresforhire.R;
 import com.example.choresforhire.chores.MyChoresFragment;
 import com.example.choresforhire.chores.ToDoChoresFragment;
+import com.example.choresforhire.post.PostDetails;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 public class ProfileFragment extends Fragment {
@@ -27,6 +31,7 @@ public class ProfileFragment extends Fragment {
     private Button mBtnLogout;
     private Button mBtnMyChores;
     private Button mBtnTodoChores;
+    private ImageView mProfilePic;
     private TextView mProfileName;
     private TextView mProfileEmail;
 
@@ -50,9 +55,19 @@ public class ProfileFragment extends Fragment {
 
         mProfileName = view.findViewById(R.id.profileName);
         mProfileEmail = view.findViewById(R.id.profileEmail);
+        mProfilePic = view.findViewById(R.id.ivProfilePicPost);
 
         mProfileName.setText(currUser.getUsername());
         mProfileEmail.setText(currUser.getEmail());
+
+        ParseFile profilePic = (ParseFile) currUser.get("profilePic");
+
+        if (profilePic != null) {
+            Glide.with(getContext()).load(profilePic.getUrl()).into(mProfilePic);
+        } else {
+            int drawableIdentifier = (getContext()).getResources().getIdentifier("blank_profile", "drawable", (getContext()).getPackageName());
+            Glide.with(getContext()).load(drawableIdentifier).into(mProfilePic);
+        }
 
         mBtnLogout = view.findViewById(R.id.btnLogout);
         mBtnMyChores = view.findViewById(R.id.btnMyChores);

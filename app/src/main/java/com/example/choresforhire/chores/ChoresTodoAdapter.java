@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,12 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.choresforhire.R;
 import com.example.choresforhire.post.Post;
 import com.example.choresforhire.post.PostDetails;
 import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.post.SelectListener;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
@@ -61,6 +64,7 @@ public class ChoresTodoAdapter extends RecyclerView.Adapter<ChoresTodoAdapter.To
         private TextView mTodoPay;
         private TextView mTodoTitle;
         private TextView mTodoPoster;
+        private ImageView mProfilePic;
         private TextView mTodoDistance;
         private CheckBox mTodoCheckBox;
         private TextView mTodoDescription;
@@ -72,6 +76,7 @@ public class ChoresTodoAdapter extends RecyclerView.Adapter<ChoresTodoAdapter.To
             mTodoPoster = itemView.findViewById(R.id.todoPoster);
             mTodoDistance = itemView.findViewById(R.id.todoDistance);
             mTodoCheckBox = itemView.findViewById(R.id.todoCheckBox);
+            mProfilePic = itemView.findViewById(R.id.ivProfilePicPost);
             mTodoDescription = itemView.findViewById(R.id.todoDescription);
         }
 
@@ -91,6 +96,15 @@ public class ChoresTodoAdapter extends RecyclerView.Adapter<ChoresTodoAdapter.To
             }
 
             mTodoPoster.setText(post.getUser().getUsername());
+
+            ParseFile profilePic = (ParseFile) post.getUser().get("profilePic");
+
+            if (profilePic != null) {
+                Glide.with(mContext).load(profilePic.getUrl()).into(mProfilePic);
+            } else {
+                int drawableIdentifier = (mContext).getResources().getIdentifier("blank_profile", "drawable", (mContext).getPackageName());
+                Glide.with(mContext).load(drawableIdentifier).into(mProfilePic);
+            }
 
             if (post.isCompleted()) {
                 mTodoCheckBox.setChecked(true);

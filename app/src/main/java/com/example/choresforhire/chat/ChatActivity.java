@@ -37,7 +37,6 @@ public class ChatActivity extends AppCompatActivity {
     public static final int MAX_CHAT_MESSAGES_TO_SHOW = 50;
     public static final long POLL_INTERVAL = TimeUnit.SECONDS.toMillis(3);
 
-    boolean mFirstLoad;
     private EditText mMessage;
     private ImageButton mIbSend;
     private ParseUser mChatUser;
@@ -45,6 +44,7 @@ public class ChatActivity extends AppCompatActivity {
     private ChatAdapter mChatAdapter;
     private ArrayList<Message> mMessages;
 
+    private boolean mFirstLoad;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

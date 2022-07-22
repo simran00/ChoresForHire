@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.choresforhire.R;
 import com.example.choresforhire.chores.ChoresTodoAdapter;
 import com.example.choresforhire.chores.MyChoresAdapter;
@@ -22,6 +24,7 @@ import com.example.choresforhire.post.PostsAdapter;
 import com.example.choresforhire.post.SelectListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -44,8 +47,7 @@ public class OtherProfile extends AppCompatActivity implements SelectListener {
         setContentView(R.layout.other_profile);
 
         TextView mProfileName;
-        TextView mProfileEmail;
-
+        ImageView mProfilePic;
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -60,12 +62,20 @@ public class OtherProfile extends AppCompatActivity implements SelectListener {
         mChoresAdapter = new PostsAdapter(OtherProfile.this, mAllPosts, this);
 
         mProfileName = findViewById(R.id.profileNameOther);
-        mProfileEmail = findViewById(R.id.profileEmailOther);
+        mProfilePic = findViewById(R.id.ivProfilePicPost);
         mTheirChoresView = findViewById(R.id.rvTheirChores);
         mCancel = findViewById(R.id.btnProfileExit);
 
         mProfileName.setText(mOtherUser.getUsername());
-        mProfileEmail.setText(mOtherUser.getEmail());
+
+        ParseFile profilePic = (ParseFile) mOtherUser.get("profilePic");
+
+        if (profilePic != null) {
+            Glide.with(OtherProfile.this).load(profilePic.getUrl()).into(mProfilePic);
+        } else {
+            int drawableIdentifier = (OtherProfile.this).getResources().getIdentifier("blank_profile", "drawable", (OtherProfile.this).getPackageName());
+            Glide.with(OtherProfile.this).load(drawableIdentifier).into(mProfilePic);
+        }
 
         mTheirChoresView.setLayoutManager(new LinearLayoutManager(OtherProfile.this));
         mTheirChoresView.setAdapter(mChoresAdapter);
