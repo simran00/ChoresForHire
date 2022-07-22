@@ -71,6 +71,7 @@ public class ChatsFragment extends Fragment implements SelectListenerChat {
 
     private void queryChatUsers() {
         ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.addDescendingOrder("createdAt");
 
         //  query from cache
         query.fromPin(CHAT_LABEL).findInBackground().continueWithTask((task) -> {

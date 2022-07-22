@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.choresforhire.R;
+import com.parse.ParseFile;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -80,59 +81,51 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     }
 
     public class IncomingMessageViewHolder extends MessageViewHolder {
-        ImageView imageOther;
-        TextView body;
-        TextView name;
+        TextView mBody;
+        TextView mName;
+        ImageView mImageOther;
 
         public IncomingMessageViewHolder(View itemView) {
             super(itemView);
-            imageOther = (ImageView)itemView.findViewById(R.id.ivProfileOther);
-            body = (TextView)itemView.findViewById(R.id.tvBody);
-            name = (TextView)itemView.findViewById(R.id.tvName);
+            mImageOther = (ImageView)itemView.findViewById(R.id.ivProfileOther);
+            mBody = (TextView)itemView.findViewById(R.id.tvBody);
+            mName = (TextView)itemView.findViewById(R.id.tvName);
         }
 
         @Override
         public void bindMessage(Message message) {
-            Glide.with(mContext)
-                    .load(getProfileUrl(message.getUser().getObjectId()))
-                    .circleCrop() // create an effect of a round profile picture
-                    .into(imageOther);
-            body.setText(message.getBody());
-            name.setText(message.getUser().getUsername());
+            ParseFile profilePic = (ParseFile) message.getUser().get("profilePic");
+            if (profilePic != null) {
+                Glide.with(mContext).load(profilePic.getUrl()).circleCrop().into(mImageOther);
+            } else {
+                int drawableIdentifier = mContext.getResources().getIdentifier("blank_profile", "drawable", mContext.getPackageName());
+                Glide.with(mContext).load(drawableIdentifier).circleCrop().into(mImageOther);
+            }
+            mBody.setText(message.getBody());
+            mName.setText(message.getUser().getUsername());
         }
     }
 
     public class OutgoingMessageViewHolder extends MessageViewHolder {
-        ImageView imageMe;
-        TextView body;
+        TextView mBody;
+        ImageView mImageMe;
 
         public OutgoingMessageViewHolder(View itemView) {
             super(itemView);
-            imageMe = (ImageView)itemView.findViewById(R.id.ivProfileMe);
-            body = (TextView)itemView.findViewById(R.id.tvBody);
+            mImageMe = (ImageView)itemView.findViewById(R.id.ivProfileMe);
+            mBody = (TextView)itemView.findViewById(R.id.tvBody);
         }
 
         @Override
         public void bindMessage(Message message) {
-            Glide.with(mContext)
-                    .load(getProfileUrl(message.getUser().getObjectId()))
-                    .circleCrop() // create an effect of a round profile picture
-                    .into(imageMe);
-            body.setText(message.getBody());
+            ParseFile profilePic = (ParseFile) message.getUser().get("profilePic");
+            if (profilePic != null) {
+                Glide.with(mContext).load(profilePic.getUrl()).circleCrop().into(mImageMe);
+            } else {
+                int drawableIdentifier = mContext.getResources().getIdentifier("blank_profile", "drawable", mContext.getPackageName());
+                Glide.with(mContext).load(drawableIdentifier).circleCrop().into(mImageMe);
+            }
+            mBody.setText(message.getBody());
         }
-    }
-
-    // Create a gravatar image based on the hash value obtained from userId
-    private static String getProfileUrl(final String userId) {
-        String hex = "";
-        try {
-            final MessageDigest digest = MessageDigest.getInstance("MD5");
-            final byte[] hash = digest.digest(userId.getBytes());
-            final BigInteger bigInt = new BigInteger(hash);
-            hex = bigInt.abs().toString(16);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "https://www.gravatar.com/avatar/" + hex + "?d=identicon";
     }
 }

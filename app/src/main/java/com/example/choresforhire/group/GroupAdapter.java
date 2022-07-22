@@ -5,12 +5,14 @@ import static com.example.choresforhire.home.HomeFragment.TAG;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.bumptech.glide.Glide;
 import com.example.choresforhire.R;
 import com.example.choresforhire.home.MainActivity;
 import com.example.choresforhire.post.PostDetails;
@@ -27,6 +30,7 @@ import com.example.choresforhire.profile.OtherProfile;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
@@ -69,31 +73,44 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
-        private Button btnJoin;
-        private TextView groupName;
-        private TextView groupDescription;
+        private Button mBtnJoin;
+        private ImageView mGroupPic;
+        private TextView mGroupName;
+        private TextView mGroupDescription;
 
         public GroupViewHolder(@NonNull View view) {
             super(view);
-            groupName = view.findViewById(R.id.tvGroupName);
-            groupDescription = view.findViewById(R.id.tvGroupDescription);
-            btnJoin = view.findViewById(R.id.btnGroupJoin);
+            mGroupName = view.findViewById(R.id.tvGroupName);
+            mGroupPic = view.findViewById(R.id.tvGroupImage);
+            mGroupDescription = view.findViewById(R.id.tvGroupDescription);
+            mBtnJoin = view.findViewById(R.id.btnGroupJoin);
         }
 
         public void bind(Group group) throws JSONException {
-            groupName.setText(group.getName());
-            groupDescription.setText(group.getDescription());
+            mGroupName.setText(group.getName());
+            mGroupDescription.setText(group.getDescription());
             ParseUser currUser = ParseUser.getCurrentUser();
+
+            ParseFile groupPic = (ParseFile) group.get("groupPic");
+
+            if (groupPic != null) {
+                Glide.with(mContext).load(groupPic.getUrl()).into(mGroupPic);
+            } else {
+                int drawableIdentifier = (mContext).getResources().getIdentifier("broom", "drawable", (mContext).getPackageName());
+                Glide.with(mContext).load(drawableIdentifier).into(mGroupPic);
+            }
+
             ParseRelation<Group> currGroups = currUser.getRelation("groupsJoined");
             ParseQuery<Group> query = currGroups.getQuery();
             query.whereEqualTo("objectId", group.getObjectId());
+            query.addDescendingOrder("createdAt");
             query.findInBackground(new FindCallback<Group>() {
                 @Override
                 public void done(List<Group> objects, ParseException e) {
                     if (!objects.isEmpty()) {
-                        btnJoin.setText("Enter");
-                        btnJoin.setBackgroundColor(Color.rgb(79, 121, 66));
-                        btnJoin.setOnClickListener(new View.OnClickListener() {
+                        mBtnJoin.setText("Enter");
+                        mBtnJoin.setBackgroundColor(Color.rgb(79, 121, 66));
+                        mBtnJoin.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Bundle args = new Bundle();
@@ -105,9 +122,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                             }
                         });
                     } else {
-                        btnJoin.setText("Join");
-                        btnJoin.setBackgroundColor(Color.rgb(41, 65, 78));
-                        btnJoin.setOnClickListener(new View.OnClickListener() {
+                        mBtnJoin.setText("Join");
+                        mBtnJoin.setBackgroundColor(Color.rgb(41, 65, 78));
+                        mBtnJoin.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 currGroups.add(group);

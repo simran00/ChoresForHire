@@ -39,7 +39,7 @@
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3486480712890625" />
         <entry key="app/src/main/res/layout/fragment_my_chores.xml" value="0.23714481094508494" />
         <entry key="app/src/main/res/layout/fragment_other_profile.xml" value="0.21351577095363458" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.30508243829063025" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.2273284912109375" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.22711029052734377" />
         <entry key="app/src/main/res/layout/fragment_to_do_chores.xml" value="0.24528301886792453" />
         <entry key="app/src/main/res/layout/group_card_item.xml" value="0.24205378973105135" />
@@ -51,7 +51,7 @@
         <entry key="app/src/main/res/layout/my_chores_item.xml" value="0.3433088864961294" />
         <entry key="app/src/main/res/layout/my_chores_swipe_menu.xml" value="0.17922363281250003" />
         <entry key="app/src/main/res/layout/other_profile.xml" value="0.23959808349609374" />
-        <entry key="app/src/main/res/layout/post_details.xml" value="0.214202880859375" />
+        <entry key="app/src/main/res/layout/post_details.xml" value="0.225146484375" />
         <entry key="app/src/main/res/layout/profile_update.xml" value="0.1550409952799479" />
         <entry key="app/src/main/res/layout/sort_list_item.xml" value="0.6423328344372736" />
         <entry key="app/src/main/res/menu/current_place_menu.xml" value="0.18153846153846154" />

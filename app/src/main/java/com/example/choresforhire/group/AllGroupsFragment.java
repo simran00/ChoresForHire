@@ -84,6 +84,7 @@ public class AllGroupsFragment extends Fragment {
 
     private void queryGroups() {
         ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
+        query.addDescendingOrder("createdAt");
 
         //  query from cache
         query.fromPin(GROUP_LABEL).findInBackground().continueWithTask((task) -> {
