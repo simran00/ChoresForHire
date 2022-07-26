@@ -7,6 +7,21 @@
     android:orientation="vertical"
     tools:context=".home.MainActivity">
 
+    <TextView
+        android:id="@+id/tvLogo"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:background="#E1EBEE"
+        android:fontFamily="@font/poiret_one"
+        android:text="CHORES FOR HIRE"
+        android:textAlignment="center"
+        android:textColor="#FF20333D"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <RadioGroup
         android:id="@+id/sortRadioGroup"
         android:layout_width="wrap_content"
@@ -61,13 +76,12 @@
 
     <SearchView
         android:id="@+id/svSearch"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:queryHint="Search"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLogo" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnMapReturn"

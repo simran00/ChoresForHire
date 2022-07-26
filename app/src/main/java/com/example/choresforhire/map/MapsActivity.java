@@ -167,6 +167,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             lastKnownLocation = task.getResult();
+                            System.out.println("last known location: "+lastKnownLocation);
                             if (lastKnownLocation != null) {
                                 saveCurrentUserLocation(lastKnownLocation);
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class ProfileFragment extends Fragment {
 
     private Button mBtnLogout;
     private Button mBtnMyChores;
+    private ImageButton mBtnEdit;
     private Button mBtnTodoChores;
     private ImageView mProfilePic;
     private TextView mProfileName;
@@ -69,9 +71,22 @@ public class ProfileFragment extends Fragment {
             Glide.with(getContext()).load(drawableIdentifier).into(mProfilePic);
         }
 
+        mBtnEdit = view.findViewById(R.id.ibEdit);
         mBtnLogout = view.findViewById(R.id.btnLogout);
         mBtnMyChores = view.findViewById(R.id.btnMyChores);
         mBtnTodoChores = view.findViewById(R.id.btnToDo);
+
+        mBtnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new EditProfileFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.flContainer, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
 
         mBtnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
